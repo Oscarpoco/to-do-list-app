@@ -1,0 +1,138 @@
+
+.sign-in
+{
+    display: flex;
+    flex-direction: column;
+    gap: 0.6em;
+    width: 100%;
+    height: 100%;
+    justify-content: center;
+    align-items: center;
+    padding: 9px;
+}
+
+.logo
+{
+    width: 100%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: start;
+}
+
+.logo .icon
+{
+    color: black;
+    margin-left: 2.5px;
+}
+
+.logo h3
+{
+    display: flex;
+    align-items: center;
+}
+
+
+.display-sign-content
+{
+    width: 100%;
+    height: 90%;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    gap: 0.3em;
+}
+
+.welcome-message
+{
+    width: 50%;
+    height: 95%;
+    display: flex;
+    flex-direction: column;
+}
+
+
+
+.welcome-message p
+{
+   font-size: 2em;
+   font-weight: bold;
+}
+span
+{
+    color: #03a9f4;
+}
+
+.slogan
+{
+    height: 38%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.slogan img
+{
+    width: 40%;
+    height: 100%;
+}
+
+.login-box
+{
+    width: 50%;
+    height: 90%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.2em;
+}
+
+.signIn-Nav
+{
+    height: 15%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 4em;
+}
+
+.signIn-Nav button
+{
+    height:65%;
+    width: 32%;
+    font-weight: bold;
+    border: 2px solid #e3f2fd;
+    border-radius: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #e3f2fd;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    gap: 0.5em;
+}
+
+.signIn-Nav button:hover
+{
+    background-color: rgba(255, 255, 255, 0.7);
+    transition: all .7s ease-in-out;
+    border: rgba(255, 255, 255, 0.7);
+}
+
+.signIn-Nav .icon
+{
+    font-size: 13px;
+    color: #9d8f16;
+}
+
+
+.signIn-form
+{
+    height: 85%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
