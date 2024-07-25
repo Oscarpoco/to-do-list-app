@@ -1,9 +1,11 @@
 import './dashboard.css';
+
 import { LuListTodo } from "react-icons/lu";
 import { MdDashboardCustomize } from "react-icons/md";
 import { RiLogoutBoxLine } from "react-icons/ri";
-import { BsSearch } from "react-icons/bs";
 import { FaRegCircleUser } from "react-icons/fa6";
+import DateCalendarReferenceDate from './calender';
+
 
 
 function Dashboard(){
@@ -36,8 +38,7 @@ function Dashboard(){
                 </div>
                 <div className='to-do-main'>
                     <div className='calender-box'>
-                        <div className='top-box'></div>
-                        <div className='bottom-box'></div>
+                        
                     </div>
                     <div className='pending-box'></div>
                     <div className='completed-box'></div>

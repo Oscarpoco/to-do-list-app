@@ -3,7 +3,7 @@
 {
     display: flex;
     flex-direction: column;
-    gap: 0.6em;
+    /* gap: 0.6em; */
     width: 100%;
     height: 100%;
     justify-content: center;
@@ -38,7 +38,7 @@
     width: 100%;
     height: 90%;
     display: flex;
-    align-items: end;
+    /* align-items: end; */
     justify-content: center;
     gap: 0.3em;
 }
@@ -46,7 +46,7 @@
 .welcome-message
 {
     width: 50%;
-    height: 95%;
+    height: 100%;
     display: flex;
     flex-direction: column;
 }
@@ -95,7 +95,7 @@ span
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 4em;
+    gap: 2.5em;
 }
 
 .signIn-Nav button
@@ -136,3 +136,64 @@ span
     align-items: center;
 }
 
+@media only screen and (max-width: 740px) 
+{
+  .sign-in
+  {
+    justify-content: start;
+  }
+  
+  .logo
+  {
+    height: 10%;
+  }
+
+  .display-sign-content
+  {
+    flex-direction: column;
+    align-items: center;
+    justify-content: start;
+  }
+
+  .welcome-message
+  {
+    width: 100%;
+    height: 40%;
+    justify-content: end;
+    align-items: center;
+  }
+
+  .welcome-message p
+  {
+    font-size: 1.2em;
+  }
+
+  .slogan
+  {
+    width: 100%;
+    height: 60%;
+    align-items: center;
+  }
+
+  .slogan img
+  {
+    width: 40%;
+    height: 80%;
+  }
+
+  .login-box
+  {
+    height: 40%;
+    width: 100%;
+  }
+
+  /* .signIn-Nav
+  {
+    height: 25%;
+  } */
+
+  .signIn-Nav button 
+  {
+    font-size: auto;
+  }
+}

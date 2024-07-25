@@ -26,8 +26,8 @@ function SignIn(){
                         <button><GrUserNew className='icon'/> Sign Up</button>
                     </div>
                     <div className='signIn-form'>
-                        {/* <SignInPopup /> */}
-                        <SignUpPopup />
+                        <SignInPopup />
+                        {/* <SignUpPopup /> */}
                     </div>
                 </div>
             </div>
