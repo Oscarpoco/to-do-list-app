@@ -1,7 +1,7 @@
 .signInPopup
 {
-    width: 77%;
-    height: 80%;
+    width: 72%;
+    height: 77%;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -28,7 +28,7 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 1em;
+    gap: 2em;
 }
 
 .signInPopup input
@@ -37,7 +37,7 @@
     height: 15%;
     border: none;
     border-bottom: 2px solid black;
-    font-size: 60%;
+    font-size: 80%;
     outline: none;
     color: black;
 }
@@ -63,4 +63,25 @@
 {
     border-bottom:2px solid #03a9f4;
     transition: all .2s ease-in-out;
+}
+
+@media only screen and (max-width: 740px)
+{
+    .signInPopup input
+    {
+        border-bottom: 1px solid;
+        width: 50%;
+    }
+    
+    .signInPopup input:focus
+    {
+        border-bottom: 1px solid #03a9f4;
+    }
+
+    .signInPopup button
+    {
+        width: 30%;
+        /* height: 19%; */
+        font-size: 70%;
+    }
 }

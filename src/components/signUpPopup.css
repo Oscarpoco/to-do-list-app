@@ -1,7 +1,7 @@
 .signUpPopup
 {
-    width: 77%;
-    height: 80%;
+    width: 72%;
+    height: 90%;
     display: flex;
     justify-content: center;
     flex-direction: column;
@@ -16,7 +16,7 @@
     height: 15%;
     display: flex;
     justify-content: center;
-    align-items: end;
+    align-items: center;
     font-weight: bold;
 }
 
@@ -26,7 +26,7 @@
     height: 75%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-around;
     align-items: center;
     gap: 1em;
 }
@@ -63,4 +63,25 @@
 {
     border-bottom:2px solid #03a9f4;
     transition: all .2s ease-in-out;
+}
+
+@media only screen and (max-width: 740px)
+{
+    .signUpPopup input
+    {
+        border-bottom: 1px solid;
+        width: 50%;
+    }
+    
+    .signUpPopup input:focus
+    {
+        border-bottom: 1px solid #03a9f4;
+    }
+
+    .signUpPopup button
+    {
+        /* width: 30%; */
+        /* height: 19%; */
+        font-size: 70%;
+    }
 }
