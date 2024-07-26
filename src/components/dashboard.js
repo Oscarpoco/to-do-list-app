@@ -7,6 +7,7 @@ import { FaRegCircleUser } from "react-icons/fa6";
 import { MdOutlinePendingActions } from "react-icons/md";
 import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
 import AddItems from './items';
+import CurrentTime from './CurrentTime';
 
 function Dashboard() {
     const [items, setItems] = useState([]);
@@ -34,7 +35,9 @@ function Dashboard() {
               <button><MdDashboardCustomize className='icon' />Dashboard</button>
             </div>
           </div>
-          <div className='middle'></div>
+          <div className='middle'>
+            <CurrentTime />
+          </div>
           <div className='bottom'>
             <button><RiLogoutBoxLine className='icon' /> Logout</button>
           </div>
