@@ -1,17 +1,47 @@
 import './signInPopup.css';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
-function SignInPopup(){
-    return(
+function SignInPopup(setIsAuthenticated) {
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        // Dummy authentication check
+        if (username === 'user' && password === 'password') {
+            setIsAuthenticated=(true)
+            navigate('/dashboard');
+        } else {
+            alert('Invalid username or password');
+        }
+    };
+
+    return (
         <div className='signInPopup'>
             <div className='title'>Sign In</div>
-            <form>
-                <input type='text' id='username' placeholder='Username' required></input>
-                <input type='text' id='password' placeholder='Password' required></input>
-                <button>Submit</button>
-                
+            <form onSubmit={handleSubmit}>
+                <input
+                    type='text'
+                    id='username'
+                    placeholder='Username'
+                    value={username}
+                    onChange={(e) => setUsername(e.target.value)}
+                    required
+                />
+                <input
+                    type='password'
+                    id='password'
+                    placeholder='Password'
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    required
+                />
+                <button type='submit'>Submit</button>
             </form>
         </div>
-    )
+    );
 }
 
 export default SignInPopup;
