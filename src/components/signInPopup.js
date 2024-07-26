@@ -2,7 +2,7 @@ import './signInPopup.css';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-function SignInPopup(setIsAuthenticated) {
+function SignInPopup({HandleAuthentication}) {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate();
@@ -11,7 +11,7 @@ function SignInPopup(setIsAuthenticated) {
         e.preventDefault();
         // Dummy authentication check
         if (username === 'user' && password === 'password') {
-            setIsAuthenticated=(true)
+            
             navigate('/dashboard');
         } else {
             alert('Invalid username or password');
@@ -38,7 +38,7 @@ function SignInPopup(setIsAuthenticated) {
                     onChange={(e) => setPassword(e.target.value)}
                     required
                 />
-                <button type='submit'>Submit</button>
+                <button type='submit' onClick={HandleAuthentication}>Submit</button>
             </form>
         </div>
     );

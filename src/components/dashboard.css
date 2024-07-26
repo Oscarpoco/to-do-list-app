@@ -2,11 +2,12 @@
 {
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.5);
     display: flex;
     justify-content: center;
     align-items: end;
     gap: 0.7em;
+    padding: 10px;
 }
 
 .menu-box
@@ -28,28 +29,25 @@
     justify-content: center;
     align-items: center;
     gap: 1.3em;
+    
 
-}
-
-.top .logo
-{
-    justify-content: center;
 }
 
 .menu
 {
     height: 40%;
     width: 100%;
+    display: flex;
+    justify-content: center;
 }
 .menu button
 {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 90%;
     background-color: rgba(255, 255, 255, 0.7);
     border: none;
-    border-radius: 15px;
+    border-radius: 5px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-    /* font-weight: bold; */
     font-size: 70%;
     cursor: pointer;
     display: flex;
@@ -66,10 +64,11 @@
 
 .middle
 {
-    width: 100%;
-    height: 60%;
-    border-radius: 20px;
-    background-color: rgba(238, 238, 238, 0.737);
+    width: 90%;
+    height: 50%;
+    border-radius: 5px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    background-color: rgba(255, 255, 255, 0.7);
 }
 
 .bottom
@@ -88,13 +87,13 @@
 }
 .bottom button
 {
-    width: 100%;
-    height: 100%;
+    width: 90%;
+    height: 95%;
     background-color: rgba(255, 255, 255, 0.7);
     border: none;
     /* font-weight: bold; */
     font-size: 60%;
-    border-radius: 15px;
+    border-radius: 5px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     display: flex;
@@ -134,7 +133,7 @@
     width: 25.5%;
     height: 70%;
     outline: none;
-    border-radius: 15px;
+    border-radius: 5px;
     border: rgba(255, 255, 255, 0.7);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     display: flex;
@@ -158,9 +157,9 @@
 {
     height: 90%;
     width: 55%;
-    border-radius: 15px;
-    border: #e3f2fd;
-    background-color: #e3f2fd;
+    border-radius: 5px;
+    border: #00e676;
+    background-color: #00e676;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     /* font-weight: bold; */
     font-size: 70%;
@@ -169,18 +168,20 @@
     align-items: center;
     gap: 0.3em;
     cursor: pointer;
+    color: #e3f2fd;
 }
 
 .profile button:hover
 {
     background-color: rgba(255, 255, 255, 0.7);
     transition: all .7s ease-in-out;
+    color: black;
 }
 .profile span
 {
     font-size: 16px;
     font-weight: bold;
-    color: green;
+    color: red;
 }
 
 .circle
@@ -215,34 +216,53 @@
     width: 100%;
     display: flex;
     justify-content: center;
-    /* align-items: center; */
+    align-items: center;
     gap: 0.6em;
 }
 
-.calender-box
+.pending
 {
-    width: 30%;
+    width: 55%;
     height: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
-    border-radius: 20px;
+    align-items: center;
+    gap: 0.1em;
+    border-radius: 5px;
+    background-color: rgba(255, 255, 255, 0.08);
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
 }
 
-.pending-box
+.title
 {
-    width: 40%;
-    height: 100%;
-    border-radius: 20px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 7%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 80%;
 }
 
-.completed-box
+.tasks
 {
-    width: 40%;
-    height: 100%;
-    border-radius: 20px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    width: 100%;
+    height: 93%;
+    display: grid;
+    overflow-y: auto;
 }
 
+
+.completed
+{
+    width: 45%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 0.1em;
+    border-radius: 5px;
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+}
 

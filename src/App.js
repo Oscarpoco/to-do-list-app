@@ -5,8 +5,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { useState } from 'react';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
+  const HandleAuthentication = () =>{
+    setIsAuthenticated(true)
+  }
 
   return (
     <Router>
@@ -22,7 +25,7 @@ function App() {
             />
             <Route
               path='/dashboard'
-              element={isAuthenticated ? <Dashboard /> : <SignIn setIsAuthenticated={setIsAuthenticated} />}
+              element={isAuthenticated ? <Dashboard /> : <SignIn onClick={HandleAuthentication} />}
             />
           </Routes>
         </main>
