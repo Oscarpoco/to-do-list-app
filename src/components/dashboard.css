@@ -242,6 +242,12 @@
     justify-content: center;
     align-items: center;
     font-size: 80%;
+    gap: 0.4em;
+}
+
+.title .icon
+{
+    font-size: 18px;
 }
 
 .tasks
@@ -264,5 +270,15 @@
     gap: 0.1em;
     border-radius: 5px;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+}
+
+.completed .title
+{
+    color: #00e676;
+}
+
+.pending .title
+{
+    color: #2196f3;
 }
 
