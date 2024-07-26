@@ -4,8 +4,8 @@ import { Delete as DeleteIcon } from '@mui/icons-material';
 
 const AddItems = ({ items, onDelete }) => {
   return (
-    <Container>
-      <div className="tasks">
+    <Container >
+      <div className="tasks" style={{overflow: 'hidden'}}>
         <Grid container spacing={2}>
           {items.map((item, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
@@ -16,7 +16,9 @@ const AddItems = ({ items, onDelete }) => {
                   textAlign: 'center',
                   // width: '50%',
                   height: '150px',
-                  position: 'relative'
+                  position: 'relative',
+                  cursor: 'pointer',
+                  overflow: 'auto'
                 }}
               >
                 <div>{item.text}</div>
