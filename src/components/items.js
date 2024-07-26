@@ -6,19 +6,19 @@ const AddItems = ({ items, onDelete }) => {
   return (
     <Container >
       <div className="tasks" style={{overflow: 'hidden'}}>
-        <Grid container spacing={2}>
+        <Grid container spacing={1.5}>
           {items.map((item, index) => (
             <Grid item xs={12} sm={6} md={4} lg={3} key={item.id}>
               <Paper
-                elevation={2}
-                style={{ 
-                  padding: 2, // Increase padding
+                elevation={4}
+                style={{  
                   textAlign: 'center',
                   // width: '50%',
                   height: '150px',
                   position: 'relative',
                   cursor: 'pointer',
-                  overflow: 'auto'
+                  overflow: 'auto',
+                  
                 }}
               >
                 <div>{item.text}</div>

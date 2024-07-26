@@ -8,7 +8,6 @@
     align-items: end;
     gap: 0.7em;
     padding: 10px;
-    overflow: hidden;
 }
 
 .menu-box
@@ -68,20 +67,50 @@
     width: 100%;
     height: 80%;
     border-radius: 5px;
-    /* box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
     background-color: inherit;
 }
 
 .bottom
 {
     height: 8%;
-    width: 98%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     align-items: center; 
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
 }
+
+.text
+{
+    display: flex;
+    width: 90%;
+    height: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.text h2
+{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+
+.text h3
+{
+    display: flex;
+    align-items: center;
+    font-size: 70%;
+    font-weight: light;
+}
+
 ::placeholder
 {
     text-align: center;
@@ -116,7 +145,6 @@
     flex-direction: column;
     align-items: center;
     gap: 0.5em;
-    overflow: hidden;
 }
 
 .searchNav
@@ -216,7 +244,6 @@
     justify-content: center;
     align-items: center;
     gap: 0.9em;
-    overflow: hidden;
 }
 
 .pending
@@ -252,9 +279,9 @@
 {
     width: 100%;
     height: 93%;
-    display: grid;
+    /* display: grid; */
     overflow-y: auto;
-    
+    padding: 5px 0;
 }
 
 ::-webkit-scrollbar {

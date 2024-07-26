@@ -37,6 +37,10 @@ function Dashboard() {
           </div>
           <div className='middle'>
             <CurrentTime />
+            <div className='text'>
+              <h2>Master Your Day, Every Day</h2>
+              <h3>Lis<span>tify</span><LuListTodo className='icon' /></h3>
+            </div>
           </div>
           <div className='bottom'>
             <button><RiLogoutBoxLine className='icon' /> Logout</button>
