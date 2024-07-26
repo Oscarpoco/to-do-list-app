@@ -2,7 +2,7 @@
 {
     width: 100%;
     height: 100%;
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.7);
     display: flex;
     justify-content: center;
     align-items: end;
@@ -68,7 +68,7 @@
     width: 90%;
     height: 50%;
     border-radius: 5px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    /* box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2); */
     background-color: rgba(255, 255, 255, 0.7);
 }
 
@@ -92,10 +92,9 @@
     height: 95%;
     background-color: rgba(255, 255, 255, 0.7);
     border: none;
-    /* font-weight: bold; */
     font-size: 60%;
     border-radius: 5px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -135,9 +134,8 @@
     width: 25.5%;
     height: 70%;
     outline: none;
+    border: 2px solid black;
     border-radius: 5px;
-    border: rgba(255, 255, 255, 0.7);
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
     display: flex;
     align-items: center;
     justify-content: end;
@@ -163,7 +161,6 @@
     border: #00e676;
     background-color: #00e676;
     box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
-    /* font-weight: bold; */
     font-size: 70%;
     display: flex;
     justify-content: center;
@@ -183,7 +180,7 @@
 {
     font-size: 16px;
     font-weight: bold;
-    color: red;
+    color: blue;
 }
 
 .circle
@@ -219,7 +216,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.6em;
+    gap: 0.9em;
     overflow: hidden;
 }
 
@@ -231,10 +228,8 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.1em;
-    border-radius: 5px;
-    background-color: rgba(255, 255, 255, 0.08);
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    gap: 0.5em;
+    background-color: rgba(255, 255, 255, 0.7);
     overflow: hidden;
 }
 
@@ -260,9 +255,10 @@
     height: 93%;
     display: grid;
     overflow-y: auto;
+    
 }
 
-.tasks::-webkit-scrollbar {
+::-webkit-scrollbar {
     width: 12px;
     
   }
@@ -302,19 +298,21 @@
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.1em;
-    border-radius: 5px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.2);
+    gap: 0.5em;
     overflow: hidden;
 }
 
 .completed .title
 {
     color: #00e676;
+    border-bottom: 2px solid #00e676;
+    border-top: 2px solid #00e676;
 }
 
 .pending .title
 {
     color: #2196f3;
+    border-bottom: 2px solid #2196f3;
+    border-top: 2px solid #2196f3;
 }
 
