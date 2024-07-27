@@ -10,7 +10,7 @@ function SignInPopup({HandleAuthentication}) {
     const handleSubmit = (e) => {
         e.preventDefault();
         // Dummy authentication check
-        if (username === 'user' && password === 'password') {
+        if (username === 'user@gmail.com' && password === 'password') {
             
             navigate('/dashboard');
         } else {
@@ -23,9 +23,9 @@ function SignInPopup({HandleAuthentication}) {
             <div className='title'>Sign In</div>
             <form onSubmit={handleSubmit}>
                 <input
-                    type='text'
+                    type='email'
                     id='username'
-                    placeholder='Username'
+                    placeholder='Email'
                     value={username}
                     onChange={(e) => setUsername(e.target.value)}
                     required

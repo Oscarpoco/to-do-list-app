@@ -10,6 +10,7 @@ import AddItems from './items';
 import CurrentTime from './CurrentTime';
 import SearchInput from './search';
 import UserPopup from './UserPopup';
+import UserTaskForm from './TasksForm';
 
 function Dashboard() {
     const [items, setItems] = useState([]);
@@ -44,9 +45,6 @@ function Dashboard() {
           </div>
           <div className='middle'>
             <CurrentTime />
-            <div className='text'>
-              <img src='main.jpeg' alt='image-main'/>
-            </div>
           </div>
           <div className='bottom'>
             <button><RiLogoutBoxLine className='icon' /> Logout</button>
@@ -58,7 +56,7 @@ function Dashboard() {
               <SearchInput />
             </div>
             <div className='profile'>
-              <button onClick={addItem}><span>+</span> New Task</button>
+              <button onClick={addItem}><span>+</span> New</button>
               <div className='circle' onClick={togglePopup}>
                 <FaRegCircleUser className='icon' />
               </div>
@@ -82,6 +80,7 @@ function Dashboard() {
           </div>
         </div>
         {isPopupVisible && <UserPopup onClose={togglePopup} />}
+        {isPopupVisible && <UserTaskForm onClose={togglePopup} />}
       </div>
     );
   }
