@@ -38,8 +38,7 @@ function Dashboard() {
           <div className='middle'>
             <CurrentTime />
             <div className='text'>
-              <h2>Master Your Day, Every Day</h2>
-              <h3>Lis<span>tify</span><LuListTodo className='icon' /></h3>
+              <img src='main.jpeg' alt='image-main'/>
             </div>
           </div>
           <div className='bottom'>
