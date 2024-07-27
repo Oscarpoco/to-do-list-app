@@ -99,12 +99,12 @@
 .text img
 {
     width: 100%;
-    height: 70%;
+    height: 50%;
 }
 
 ::placeholder
 {
-    text-align: center;
+    font-size: 100%;
 }
 .bottom button
 {
@@ -147,19 +147,20 @@
     align-items: end;
 }
 
-.searchNav input
+.searchNav .search
 {
-    padding: 0 5px;
-    width: 20%;
-    height: 55%;
-    outline: none;
-    border: 2px solid black;
-    border-radius: 5px;
+    width: 50%;
+    height: 80%;
     display: flex;
     align-items: center;
-    justify-content: end;
-    font-size: 80%;
+}
 
+.searchNav #search
+{
+    outline: none;
+    border: none;
+    border-bottom: 3px solid black;
+  
 }
 
 .searchNav .profile

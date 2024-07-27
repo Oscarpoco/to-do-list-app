@@ -8,10 +8,13 @@ import { MdOutlinePendingActions } from "react-icons/md";
 import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
 import AddItems from './items';
 import CurrentTime from './CurrentTime';
+import SearchInput from './search';
+import UserPopup from './UserPopup';
 
 function Dashboard() {
     const [items, setItems] = useState([]);
     const [completedItems, setCompletedItems] = useState([]);
+    const [isPopupVisible, setIsPopupVisible] = useState(false);
   
     const addItem = () => {
       setItems([...items, { id: Date.now(), text: `Task ${items.length + 1}` }]);
@@ -22,6 +25,10 @@ function Dashboard() {
       const completedItem = items.find(item => item.id === id);
       setItems(newItems);
       setCompletedItems([...completedItems, completedItem]);
+    };
+
+    const togglePopup = () => {
+      setIsPopupVisible(!isPopupVisible);
     };
   
     return (
@@ -47,10 +54,12 @@ function Dashboard() {
         </div>
         <div className='to-do-box'>
           <div className='searchNav'>
-            <input type='text' id='search' placeholder='Search' />
+            <div className='search'>
+              <SearchInput />
+            </div>
             <div className='profile'>
               <button onClick={addItem}><span>+</span> New Task</button>
-              <div className='circle'>
+              <div className='circle' onClick={togglePopup}>
                 <FaRegCircleUser className='icon' />
               </div>
             </div>
@@ -72,6 +81,7 @@ function Dashboard() {
             </div>
           </div>
         </div>
+        {isPopupVisible && <UserPopup onClose={togglePopup} />}
       </div>
     );
   }
