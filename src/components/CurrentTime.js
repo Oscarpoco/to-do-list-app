@@ -27,7 +27,7 @@ const styles = {
     backgroundColor: 'inherit', 
   },
   time: {
-    fontSize: '1rem',
+    fontSize: '.9rem',
     fontWeight: 'bold',
     color: '#00e676', 
   },

@@ -1,4 +1,5 @@
 /* UserPopup.css */
+
 .popup-overlay 
 {
     position: fixed;
@@ -8,17 +9,20 @@
     height: 100%;
     background: rgba(0, 0, 0, 0.5);
     display: flex;
-    justify-content: center;
+    justify-content: end;
     align-items: center;
 }
   
 .popup-content 
 {
     background: #eceff1;
+    height: 90vh;
+    width: 40vh;
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     position: relative;
+    right: 10px;
 }
   
 .popup-content button 
@@ -46,3 +50,18 @@
     transition: all .5s ease-in-out;
 }
   
+
+@media only screen and (max-width: 740px) 
+{
+    .popup-content 
+    {
+        height: 60vh;
+        width: 25vh;
+    }
+
+    .popup-overlay 
+    {
+        justify-content: center;
+        right: unset;
+    }
+}

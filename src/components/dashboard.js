@@ -1,7 +1,6 @@
 import './dashboard.css';
 import React, { useState } from 'react';
 import { LuListTodo } from "react-icons/lu";
-import { MdDashboardCustomize } from "react-icons/md";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { MdOutlinePendingActions } from "react-icons/md";
@@ -10,7 +9,7 @@ import AddItems from './items';
 import CurrentTime from './CurrentTime';
 import SearchInput from './search';
 import UserPopup from './UserPopup';
-import UserTaskForm from './TasksForm';
+// import UserTaskForm from './TasksForm';
 
 function Dashboard() {
     const [items, setItems] = useState([]);
@@ -38,9 +37,6 @@ function Dashboard() {
           <div className='top'>
             <div className='logo'>
               <h3>Lis<span>tify</span><LuListTodo className='icon' /></h3>
-            </div>
-            <div className='menu'>
-              <button><MdDashboardCustomize className='icon' />Dashboard</button>
             </div>
           </div>
           <div className='middle'>
@@ -80,7 +76,7 @@ function Dashboard() {
           </div>
         </div>
         {isPopupVisible && <UserPopup onClose={togglePopup} />}
-        {isPopupVisible && <UserTaskForm onClose={togglePopup} />}
+        {/* {isPopupVisible && <UserTaskForm onClose={togglePopup} />} */}
       </div>
     );
   }

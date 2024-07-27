@@ -5,8 +5,12 @@ import SignUpPopup from './signUpPopup';
 import { GrUserNew } from "react-icons/gr";
 import { PiSignInThin } from "react-icons/pi";
 import { useState } from 'react';
+import { FaFacebookF } from "react-icons/fa";
+import { FaLinkedinIn } from "react-icons/fa";
+import { IoLogoInstagram } from "react-icons/io5";
+import { BsTwitterX } from "react-icons/bs";
 
-function SignIn({ setIsAuthenticated }) {
+function SignIn() {
     const [isSignIn, setIsSignIn] = useState(true);
 
     const handleSignInClick = () => {
@@ -43,6 +47,15 @@ function SignIn({ setIsAuthenticated }) {
                     </div>
                 </div>
             </div>
+            <footer>
+                <div className='social-icons'>
+                    <FaFacebookF className='social'/>
+                    <FaLinkedinIn className='social'/>
+                    <IoLogoInstagram className='social'/>
+                    <BsTwitterX className='social'/>
+                </div>
+                <div className='developer'>&copy; 2024 <span>Gamefusion.</span> All rights reserved.</div>
+            </footer>
         </div>
     );
 }

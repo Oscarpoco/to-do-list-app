@@ -48,7 +48,7 @@ const styles = {
     height: '30%', 
   },
   icon: {
-    fontSize: '1rem',
+    fontSize: '1.2rem',
     cursor: 'pointer',
   },
   input: {
