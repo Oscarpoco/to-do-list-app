@@ -10,7 +10,7 @@ import CurrentTime from './CurrentTime';
 import SearchInput from './search';
 import UserPopup from './UserPopup';
 
-function Dashboard() {
+function Dashboard({setIsAuthenticated}) {
   const [items, setItems] = useState([]);
   const [completedItems, setCompletedItems] = useState([]);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -41,6 +41,11 @@ function Dashboard() {
     setIsPopupVisible(!isPopupVisible);
   };
 
+  const HandleLogout = () =>{
+
+    setIsAuthenticated(false);
+  }
+
   return (
     <div className='dashboard'>
       <div className='menu-box'>
@@ -53,7 +58,7 @@ function Dashboard() {
           <CurrentTime />
         </div>
         <div className='bottom'>
-          <button><RiLogoutBoxLine className='icon' /> Logout</button>
+          <button onClick={HandleLogout}><RiLogoutBoxLine className='icon' /> Logout</button>
         </div>
       </div>
       <div className='to-do-box'>

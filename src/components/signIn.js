@@ -10,7 +10,7 @@ import { FaLinkedinIn } from "react-icons/fa";
 import { IoLogoInstagram } from "react-icons/io5";
 import { BsTwitterX } from "react-icons/bs";
 
-function SignIn() {
+function SignIn({ setIsAuthenticated }) {
     const [isSignIn, setIsSignIn] = useState(true);
 
     const handleSignInClick = () => {
@@ -43,7 +43,7 @@ function SignIn() {
                     </div>
 
                     <div className='signIn-form'>
-                        {isSignIn ? <SignInPopup /> : <SignUpPopup />}
+                        {isSignIn ? <SignInPopup setIsAuthenticated={setIsAuthenticated} /> : <SignUpPopup />}
                     </div>
                 </div>
             </div>

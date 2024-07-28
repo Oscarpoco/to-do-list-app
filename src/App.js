@@ -1,37 +1,18 @@
 import './App.css';
+import { useState } from 'react';
 import Dashboard from './components/dashboard';
 import SignIn from './components/signIn';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { useState } from 'react';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+    const [isAuthenticated, setIsAuthenticated] = useState(false);
 
-  const HandleAuthentication = () =>{
-    setIsAuthenticated(true)
-  }
-
-  return (
-    <Router>
-      <div className="App">
-        <main>
-          <Routes>
-            <Route
-              exact
-              path='/'
-              element={
-                <SignIn />
-              }
-            />
-            <Route
-              path='/dashboard'
-              element={isAuthenticated ? <Dashboard /> : <SignIn onClick={HandleAuthentication} />}
-            />
-          </Routes>
-        </main>
-      </div>
-    </Router>
-  );
+    return (
+        <div className="App">
+            <main>
+                {isAuthenticated ? <Dashboard  setIsAuthenticated={setIsAuthenticated}/> : <SignIn setIsAuthenticated={setIsAuthenticated} />}
+            </main>
+        </div>
+    );
 }
 
 export default App;
