@@ -19,6 +19,21 @@ body
   
 }
 
+::-webkit-scrollbar 
+  {
+    width: 8,
+  }
+          
+  ::-webkit-scrollbar-track 
+  {
+    background: 'grey';
+  }
+          
+  ::-webkit-scrollbar-thumb 
+    {
+      background:  '#e3f2fd'
+    }
+
 main
 {
   width: 100%;
