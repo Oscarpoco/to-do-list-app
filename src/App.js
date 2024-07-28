@@ -20,8 +20,7 @@ function App() {
               exact
               path='/'
               element={
-                // <SignIn />
-                <Dashboard />
+                <SignIn />
               }
             />
             <Route

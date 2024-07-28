@@ -54,7 +54,7 @@ function SignIn() {
                     <IoLogoInstagram className='social'/>
                     <BsTwitterX className='social'/>
                 </div>
-                <div className='developer'>&copy; 2024 <span>Gamefusion.</span> All rights reserved.</div>
+                <div className='developer'>&copy; 2024 Gamefusion.</div>
             </footer>
         </div>
     );

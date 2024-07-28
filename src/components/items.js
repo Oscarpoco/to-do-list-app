@@ -54,7 +54,7 @@ const TaskItem = ({ item, onDelete, onUpdate }) => {
         flexDirection: 'column',
         alignItems: 'start',
         justifyContent: 'center',
-        padding: '1em',
+        padding: '.7em',
         
       }}
     >
@@ -67,38 +67,37 @@ const TaskItem = ({ item, onDelete, onUpdate }) => {
             onChange={handleChange}
             fullWidth
             margin="normal"
-            style={{ outline: 'none' }}
           />
           <Select
             name="priority"
+            label = "Priority"
             value={taskDetails.priority}
             onChange={handleChange}
             fullWidth
             margin="normal"
-            style={{ outline: 'none' }}
           >
-            <MenuItem value="High" style={{ backgroundColor: 'red' }}>High</MenuItem>
-            <MenuItem value="Medium" style={{ backgroundColor: 'yellow' }}>Medium</MenuItem>
-            <MenuItem value="Low" style={{ backgroundColor: 'blue' }}>Low</MenuItem>
+            <MenuItem value="High" style={{ color: 'red' }}>High</MenuItem>
+            <MenuItem value="Medium" style={{ color: 'yellow' }}>Medium</MenuItem>
+            <MenuItem value="Low" style={{ color: 'blue' }}>Low</MenuItem>
           </Select>
           <TextField
             name="dueDate"
             type="date"
+            label= "Date"
             value={taskDetails.dueDate}
             onChange={handleChange}
             fullWidth
             margin="normal"
-            style={{ outline: 'none'}}
           />
         </>
       ) : (
         <>
           <div className="task" >{taskDetails.task}</div>
-          <div className="priority" style={{border: '2px solid red'}}>{taskDetails.priority}</div>
+          <div className="priority" style={{border: '1px solid red'}}>{taskDetails.priority}</div>
           <div className="dueDate">{taskDetails.dueDate}</div>
         </>
       )}
-      <div style={{ position: 'absolute', top: -7, right: 0 }}>
+      <div style={{ position: 'absolute', top: -8, right: 0 }}>
         <IconButton onClick={toggleEdit} style={{ color: isEditing ? 'green' : 'blue' }}>
           {isEditing ? <SaveIcon /> : <EditIcon />}
         </IconButton>
