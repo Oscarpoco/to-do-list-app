@@ -1,37 +1,36 @@
 import './signInPopup.css';
-import { useState } from 'react';
+// import { useState } from 'react';
+import axios from 'axios';
 
 function SignInPopup({ setIsAuthenticated }) {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        if (email === 'okpoco15@gmail.com' && password === 'oscar@2000') {
-            setIsAuthenticated(true);
-        } else {
-            alert('Invalid credentials');
-        }
-    };
+    const onFinish = values =>{
+        const {username, password} = values
+        axios.post('http://localhost:3000/validatePassword', {username, password})
+        .then(res =>{
+            if(res.data.validation){
+                console.log('trtrtrrtrrt')
+            }else{console.log('Wrong credentials')}
+        })
+    }
 
     return (
         <div className='signInPopup'>
             <div className='title'>Sign In</div>
-            <form onSubmit={handleSubmit}>
+            <form onClick={onFinish}>
                 <input
-                    type='email'
-                    id='username'
+                    type='text'
+                    name='username'
                     placeholder='Email'
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                   
                     required
                 />
                 <input
                     type='password'
-                    id='password'
+                    name='password'
                     placeholder='Password'
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                
                     required
                 />
                 <button type='submit'>Submit</button>
