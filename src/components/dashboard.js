@@ -1,5 +1,6 @@
+// Dashboard.jsx
 import './dashboard.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { LuListTodo } from "react-icons/lu";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -9,17 +10,28 @@ import AddItems from './items';
 import CurrentTime from './CurrentTime';
 import SearchInput from './search';
 import UserPopup from './UserPopup';
+import Loader from './Loader';
 
-function Dashboard({setIsAuthenticated}) {
+function Dashboard({ setIsAuthenticated }) {
   const [items, setItems] = useState([]);
   const [completedItems, setCompletedItems] = useState([]);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    // Simulate loading delay for the dashboard
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, []);
 
   const addItem = () => {
     setItems([...items, {
       id: Date.now(),
       task: `Task ${items.length + 1}`,
-      priority: 'Medium' ,
+      priority: 'Medium',
       dueDate: new Date().toISOString().slice(0, 16)
     }]);
   };
@@ -41,9 +53,17 @@ function Dashboard({setIsAuthenticated}) {
     setIsPopupVisible(!isPopupVisible);
   };
 
-  const HandleLogout = () =>{
+  const handleLogout = () => {
+    setIsLoading(true);
 
-    setIsAuthenticated(false);
+    setTimeout(() => {
+      setIsAuthenticated(false);
+      setIsLoading(false);
+    }, 2000);
+  };
+
+  if (isLoading) {
+    return <Loader name="Processing" />;
   }
 
   return (
@@ -58,7 +78,7 @@ function Dashboard({setIsAuthenticated}) {
           <CurrentTime />
         </div>
         <div className='bottom'>
-          <button onClick={HandleLogout}><RiLogoutBoxLine className='icon' /> Logout</button>
+          <button onClick={handleLogout}><RiLogoutBoxLine className='icon' /> Logout</button>
         </div>
       </div>
       <div className='to-do-box'>

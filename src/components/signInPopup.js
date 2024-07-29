@@ -10,7 +10,7 @@ function SignInPopup({ setIsAuthenticated }) {
         axios.post('http://localhost:3000/validatePassword', {username, password})
         .then(res =>{
             if(res.data.validation){
-                console.log('trtrtrrtrrt')
+                setIsAuthenticated(true);
             }else{console.log('Wrong credentials')}
         })
     }

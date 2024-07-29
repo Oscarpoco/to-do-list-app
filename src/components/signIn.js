@@ -1,3 +1,4 @@
+// SignIn.jsx
 import './signIn.css';
 import { LuListTodo } from "react-icons/lu";
 import SignInPopup from './signInPopup';
@@ -9,9 +10,11 @@ import { FaFacebookF } from "react-icons/fa";
 import { FaLinkedinIn } from "react-icons/fa";
 import { IoLogoInstagram } from "react-icons/io5";
 import { BsTwitterX } from "react-icons/bs";
+import Loader from './Loader';
 
 function SignIn({ setIsAuthenticated }) {
     const [isSignIn, setIsSignIn] = useState(true);
+    const [isLoading, setIsLoading] = useState(false);
 
     const handleSignInClick = () => {
         setIsSignIn(true);
@@ -20,6 +23,20 @@ function SignIn({ setIsAuthenticated }) {
     const handleSignUpClick = () => {
         setIsSignIn(false);
     };
+
+    const handleSignIn = async () => {
+        setIsLoading(true);
+        
+        // Simulate authentication process
+        setTimeout(() => {
+            setIsAuthenticated(true);
+            setIsLoading(false);
+        }, 2000);
+    };
+
+    if (isLoading) {
+        return <Loader name="Signing In" />;
+    }
 
     return (
         <div className='sign-in'>
@@ -43,7 +60,7 @@ function SignIn({ setIsAuthenticated }) {
                     </div>
 
                     <div className='signIn-form'>
-                        {isSignIn ? <SignInPopup setIsAuthenticated={setIsAuthenticated} /> : <SignUpPopup />}
+                        {isSignIn ? <SignInPopup setIsAuthenticated={handleSignIn} /> : <SignUpPopup />}
                     </div>
                 </div>
             </div>
