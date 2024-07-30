@@ -43,11 +43,3 @@ main
   align-items: center;
 }
 
-@media only screen and (max-width: 740px)
-{
-  main
-  {
-    justify-content: start;
-    align-items: start;
-  }
-}
