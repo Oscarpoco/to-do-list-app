@@ -32,10 +32,11 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-app-rewired start",
     "build": "react-app-rewired build",
-    "test": "react-app-rewired test",
-    "eject": "react-scripts eject"
+  "test": "react-app-rewired test",
+  "eject": "react-scripts eject",
+  "client": "react-scripts start",
+  "start": "concurrently \"npm run client\" \"npx json-server --watch db.json --port 3004\""
   },
   "eslintConfig": {
     "extends": [
@@ -54,5 +55,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "concurrently": "^8.2.2",
+    "json-server": "^1.0.0-beta.1"
   }
 }

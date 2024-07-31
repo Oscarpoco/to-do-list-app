@@ -6,7 +6,7 @@ import SignIn from './components/signIn';
 import Loader from './components/Loader';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
   const handleAuthentication = (status) => {
