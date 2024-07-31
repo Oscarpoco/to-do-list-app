@@ -72,17 +72,17 @@
 .bottom button
 {
     width: 80%;
-    height: 70%;
+    height: 80%;
     background-color: rgba(255, 255, 255, 0.7);
     border: none;
     font-size: 70%;
     border-radius: 5px;
-    box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 0.3em;
+    gap: 0.2em;
 }
 
 .bottom button:hover
@@ -121,9 +121,10 @@
 .searchNav #search
 {
     outline: none;
-    border: none;
-    border-bottom: 3px solid black;
-  
+    border: 2px solid #fff;
+    border-radius: 5px;
+    background-color: inherit;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
 }
 
 .searchNav .profile
@@ -141,13 +142,13 @@
     height: 80%;
     width: 45%;
     border-radius: 5px;
-    border: #00e676;
-    background-color: #00e676;
+    border: #2196f3;
+    background-color: #2196f3;
     font-size: 70%;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.3em;
+    gap: 0.5em;
     cursor: pointer;
     color: #e3f2fd;
 }
@@ -160,19 +161,26 @@
 }
 .profile span
 {
-    font-size: 16px;
+    font-size: 18px;
     font-weight: bold;
-    color: red;
+    color: black;
 }
 
 .circle
 {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.circle img
+{
+    width: 90%;
+    height: 90%;
+    border-radius: 50%;
 }
 
 .circle .icon
@@ -195,22 +203,149 @@
     height: 90%;
     width: 100%;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-    gap: 0.9em;
+    gap: 0.3em;
+}
+
+.main-form
+{
+    width: 100%;
+    height: 10%;
+    border-radius: 5px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.3em;
+    
+}
+
+.task-descriptions
+{
+    width: 50%;
+    height: 100%;
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    background-color: inherit;
+    
+}
+
+.task-descriptions input
+{
+    width: 100%;
+    height: 75%;
+    border: none;
+    border-radius: 5px;
+    padding-left: 10px;
+    background-color: inherit;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+}
+
+.task-date
+{
+    width: 15%;
+    height: 100%;
+    background-color: inherit;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+}
+
+.task-date input
+{
+    width: 100%;
+    height: 80%;
+    padding: 0 20px;
+    border: none ;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    background-color: inherit;
+}
+
+.task-priority
+{
+    width: 12%;
+    height: 80%;
+    background-color: inherit;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+select
+{
+    width: 15%;
+    height: 100%;
+    text-align: center;
+    border: none;
+    text-align: center;
+}
+
+option
+{
+    outline: none;
+    border: none;
+}
+
+label
+{
+    width: 75%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 80%;
+    text-align: center;
+}
+
+.task-button
+{
+    width: 14%;
+    height: 90%;
+    background-color: inherit;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+    
+}
+
+.task-button button
+{
+    width: 75%;
+    height: 90%;
+    border: none;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    background-color: inherit;
+    font-size: 80%;
+}
+
+.task-button button:hover
+{
+    background-color: #e3f2fd;
+    transition: all 0.7s ease-in-out;
 }
 
 .pending
 {
-    width: 55%;
-    height: 100%;
+    width: 100%;
+    height: 90%;
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
     gap: 0.5em;
     background-color: rgba(255, 255, 255, 0.7);
     overflow: hidden;
+    /* background-color: blue; */
 }
 
 .title
@@ -221,7 +356,7 @@
     justify-content: center;
     align-items: center;
     font-size: 80%;
-    gap: 0.4em;
+    /* gap: 0.4em; */
 }
 
 .title .icon
@@ -235,7 +370,112 @@
     height: 93%;
     overflow-y: auto;
     overflow-x: hidden;
-    padding: 5px 0;
+    /* padding: 5px 0; */
+    display: flex;
+    flex-direction: column;
+    gap: 0.5em;
+    /* justify-content: space-between; */
+    /* align-items: center; */
+}
+
+.task-item
+{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5em;
+    border-radius: 5px;
+    padding: 0 5px;
+}
+
+.task-info
+{
+    display: flex;
+    gap: 0.3em;
+    width: 100%;
+    height: 70%;   
+}
+
+.task-info p
+{
+    border: 1px solid whitesmoke;
+    height: 50%;
+    width: 100%;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    background-color: whitesmoke;
+    overflow-Y: auto;
+    flex-wrap: wrap;
+}
+
+.task-info p::-webkit-scrollbar 
+{
+    width: 8px;
+}
+  
+.task-info p::-webkit-scrollbar-track 
+{
+    background: grey;
+    border-radius: 5px;
+}
+  
+.task-info p::-webkit-scrollbar-thumb 
+{
+    background:  #e3f2fd;
+    border-radius: 5px;
+}
+
+.task-actions
+{
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 0.3em;
+}
+
+.task-actions button
+{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: none;
+    background-color: inherit;
+}
+
+.task-actions .edit-icon:hover
+{
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    transition: all .7s ease-in-out;
+    font-size: .3rem;
+}
+
+.edit-icon
+{
+    color: #2196f3;
+    font-size: 1.5rem;
+}
+
+.delete-icon
+{
+    color: red;
+    font-size: 1.5rem;
+}
+.task-actions .delete-icon:hover
+{
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    transition: all .7s ease-in-out;
+    font-size: .3rem;
 }
 
 .tasks::-webkit-scrollbar 
@@ -252,32 +492,14 @@
 {
     background:  #e3f2fd;
 }
-  
-
-.completed
-{
-    width: 45%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 0.5em;
-    overflow: hidden;
-}
-
-.completed .title
-{
-    color: #00e676;
-    border-bottom: 2px solid #00e676;
-    border-top: 2px solid #00e676;
-}
 
 .pending .title
 {
-    color: #2196f3;
-    border-bottom: 2px solid #2196f3;
-    border-top: 2px solid #2196f3;
+    background-color: #2196f3;
+    border: 2px solid #2196f3;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    color: #fff;
 }
 
 
@@ -342,7 +564,7 @@
 
     .bottom button 
     {
-        font-size: auto;
+        font-size: 50%;
     }
 
     .to-do-box
@@ -358,9 +580,10 @@
         align-items: center;
     }
 
-    .searchNav #search:focus
+
+    .searchNav #search
     {
-        border-bottom: 3px solid rgb(0, 0, 0);
+        width: 50%;
     }
 
     .searchNav .profile
@@ -377,8 +600,8 @@
 
     .circle
     {
-        width: 25px;
-        height: 25px;
+        width: 36px;
+        height: 36px;
     }
 
     span 
@@ -396,15 +619,58 @@
         align-items: center;
     }
 
-    .pending
+    .main-form
     {
         width: 100%;
-        height: 50%;
+        height: 8%;
     }
 
-    .completed
+    .task-descriptions
+    {
+        width: 32%;
+    }
+
+    .task-date
+    {
+        width: 15%;
+    }
+
+    .task-date input
+    {
+        width: 5%;
+        border-radius: 2px;
+        font-size: 30px;
+        outline: none;
+        text-align: center;
+    }
+
+    .task-priority
+    {
+        width: 20%;
+    }
+    select 
+    {
+        background-color: #fff;
+    }
+
+    .task-button
+    {
+        width: 18%;
+        justify-content: center;
+    }
+
+    .task-button button
     {
         width: 100%;
-        height: 50%;
+        height: 90%;
+        font-size: 70%;
+        font-weight: bold;
     }
+
+    .tasks
+    {
+        width: 100%;
+        height: 90%;
+    }
+
 }

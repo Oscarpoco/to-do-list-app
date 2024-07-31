@@ -5,18 +5,29 @@ import { LuListTodo } from "react-icons/lu";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { MdOutlinePendingActions } from "react-icons/md";
-import { IoCheckmarkDoneCircleOutline } from "react-icons/io5";
-import AddItems from './items';
 import CurrentTime from './CurrentTime';
 import SearchInput from './search';
 import UserPopup from './UserPopup';
 import Loader from './Loader';
+import { BiEdit } from "react-icons/bi";
+import { AiFillDelete } from "react-icons/ai";
 
 function Dashboard({ setIsAuthenticated }) {
-  const [items, setItems] = useState([]);
-  const [completedItems, setCompletedItems] = useState([]);
   const [isPopupVisible, setIsPopupVisible] = useState(false);
+  const [isFormVisible, setIsFormVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [tasks, setTasks] = useState([]);
+  const [task, setTask] = useState("");
+  const [date, setDate] = useState("");
+  const [priority, setPriority] = useState("none");
+  const [isEditing, setIsEditing] = useState(false);
+  const [editIndex, setEditIndex] = useState(null);
+  const [profile, setProfile] = useState({
+    username: '',
+    picture: '',
+    password: ''
+  });
+
 
   useEffect(() => {
     // Simulate loading delay for the dashboard
@@ -26,28 +37,6 @@ function Dashboard({ setIsAuthenticated }) {
 
     return () => clearTimeout(timer);
   }, []);
-
-  const addItem = () => {
-    setItems([...items, {
-      id: Date.now(),
-      task: `Task ${items.length + 1}`,
-      priority: 'Medium',
-      dueDate: new Date().toISOString().slice(0, 16)
-    }]);
-  };
-
-  const deleteItem = (id) => {
-    const newItems = items.filter(item => item.id !== id);
-    const completedItem = items.find(item => item.id === id);
-    setItems(newItems);
-    setCompletedItems([...completedItems, completedItem]);
-  };
-
-  const updateItem = (index, updatedItem) => {
-    const newItems = [...items];
-    newItems[index] = updatedItem;
-    setItems(newItems);
-  };
 
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
@@ -60,6 +49,76 @@ function Dashboard({ setIsAuthenticated }) {
       setIsAuthenticated(false);
       setIsLoading(false);
     }, 2000);
+  };
+
+  const toggleFormVisibility = () => {
+    setIsFormVisible(!isFormVisible);
+  };
+
+  const handleTaskChange = (e) => {
+    setTask(e.target.value);
+  };
+
+  const handleDateChange = (e) => {
+    setDate(e.target.value);
+  };
+
+  const handlePriorityChange = (e) => {
+    setPriority(e.target.value);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+
+    if (task && date && priority !== "none") {
+      if (isEditing) {
+        const updatedTasks = tasks.map((t, index) =>
+          index === editIndex ? { task, date, priority } : t
+        );
+        setTasks(updatedTasks);
+        setIsEditing(false);
+        setEditIndex(null);
+      } else {
+        const newTask = { task, date, priority };
+        setTasks([...tasks, newTask]);
+      }
+      setTask("");
+      setDate("");
+      setPriority("none");
+      setIsFormVisible(false);
+    }
+  };
+
+  const handleEdit = (index) => {
+    const taskToEdit = tasks[index];
+    setTask(taskToEdit.task);
+    setDate(taskToEdit.date);
+    setPriority(taskToEdit.priority);
+    setIsFormVisible(true);
+    setIsEditing(true);
+    setEditIndex(index);
+  };
+
+  const handleDelete = (index) => {
+    const updatedTasks = tasks.filter((_, i) => i !== index);
+    setTasks(updatedTasks);
+  };
+
+  const handleProfileChange = (updatedProfile) => {
+    setProfile(updatedProfile);
+  };
+
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case "High":
+        return "rgba(255, 0, 0, 0.227)";
+      case "Medium":
+        return "rgba(255, 255, 0, 0.252)";
+      case "Low":
+        return "rgba(0, 128, 0, 0.277)";
+      default:
+        return "white";
+    }
   };
 
   if (isLoading) {
@@ -87,30 +146,84 @@ function Dashboard({ setIsAuthenticated }) {
             <SearchInput />
           </div>
           <div className='profile'>
-            <button onClick={addItem}><span>+</span> New</button>
+            <button onClick={toggleFormVisibility}><span>+</span> New</button>
             <div className='circle' onClick={togglePopup}>
-              <FaRegCircleUser className='icon' />
+              {profile.picture ? (
+                <img src={profile.picture} alt='Profile' className='profile-picture' />
+              ) : (
+                <FaRegCircleUser className='icon' />
+              )}
             </div>
           </div>
         </div>
         <div className='to-do-main'>
+          {isFormVisible && (
+            <form className='main-form' onSubmit={handleFormSubmit}>
+              <div className='task-descriptions'>
+                <input 
+                  type='text' 
+                  name='my-task' 
+                  placeholder='Task' 
+                  required 
+                  value={task} 
+                  onChange={handleTaskChange} 
+                />
+              </div>
+              <div className='task-date'>
+                <input 
+                  type='date' 
+                  name='my-date' 
+                  placeholder='Date' 
+                  required 
+                  value={date} 
+                  onChange={handleDateChange} 
+                />
+              </div>
+              <div className='task-priority'>
+                <label htmlFor="options">Priority</label>
+                <select 
+                  id="options" 
+                  value={priority} 
+                  onChange={handlePriorityChange}
+                >
+                  <option value="none">Select</option>
+                  <option value="High">High</option>
+                  <option value="Medium">Medium</option>
+                  <option value="Low">Low</option>
+                </select>
+              </div>
+              <div className='task-button'>
+                <button type='submit'>Proceed</button>
+              </div>
+            </form>
+          )}
           <div className='pending'>
             <div className='title'>
-              Pending Tasks <MdOutlinePendingActions className='icon'/>
+              My Tasks <MdOutlinePendingActions className='icon'/>
             </div>
             <div className='tasks'>
-              <AddItems items={items} onDelete={deleteItem} onUpdate={updateItem} />
-            </div>
-          </div>
-          <div className='completed'>
-            <div className='title'>Completed Tasks <IoCheckmarkDoneCircleOutline className='icon'/></div>
-            <div className='tasks'>
-              <AddItems items={completedItems} />
+              {tasks.map((task, index) => (
+                <div 
+                  key={index} 
+                  className='task-item' 
+                  style={{ backgroundColor: getPriorityColor(task.priority) }}
+                >
+                  <div className='task-info'>
+                    <p>{task.task}</p>
+                    <p>{task.date}</p>
+                    <p>{task.priority}</p>
+                  </div>
+                  <div className='task-actions'>
+                    <button onClick={() => handleEdit(index)}><BiEdit className='edit-icon'/></button>
+                    <button onClick={() => handleDelete(index)}><AiFillDelete className='delete-icon'/></button>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </div>
       </div>
-      {isPopupVisible && <UserPopup onClose={togglePopup} />}
+      {isPopupVisible && <UserPopup profile={profile} onClose={togglePopup} onProfileChange={handleProfileChange} />}
     </div>
   );
 }

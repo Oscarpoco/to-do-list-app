@@ -45,7 +45,7 @@ const styles = {
     justifyContent: 'start',
     position: 'relative',
     width: '70%', 
-    height: '30%', 
+    height: '50%', 
   },
   icon: {
     fontSize: '1.2rem',

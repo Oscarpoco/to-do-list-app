@@ -12,26 +12,13 @@ body
   border: rgba(255, 255, 255, 0.7);
   border-radius: 20px;
   height: 96vh;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  height: 97vh;
   display: flex;
   justify-content: center;
   align-items: center;
   
 }
-
-::-webkit-scrollbar 
-  {
-    width: 8px,
-  }
-          
-  ::-webkit-scrollbar-track 
-  {
-    background: 'grey';
-  }
-          
-  ::-webkit-scrollbar-thumb 
-    {
-      background:  '#e3f2fd'
-    }
 
 main
 {
