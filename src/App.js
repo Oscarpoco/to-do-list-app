@@ -1,27 +1,31 @@
 // App.jsx
 import './App.css';
-import { useState } from 'react';
 import Dashboard from './components/dashboard';
 import SignIn from './components/signIn';
+import { AuthProvider } from './components/AuthContext';
+import React, { useContext } from 'react';
+import AuthContext from './components/AuthContext';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-
-  const handleAuthentication = (status) => {
-    setIsAuthenticated(status);
-  };
-
   return (
-    <div className="App">
-      <main>
-        {isAuthenticated ? (
-          <Dashboard setIsAuthenticated={handleAuthentication} />
-        ) : (
-          <SignIn setIsAuthenticated={handleAuthentication} />
-        )}
-      </main>
-    </div>
+    <AuthProvider>
+      <div className="App">
+        <main>
+          <AuthConsumer />
+        </main>
+      </div>
+    </AuthProvider>
   );
 }
+
+const AuthConsumer = () => {
+  const { isSignedIn, setIsSignedIn } = useContext(AuthContext);
+
+  return isSignedIn ? (
+    <Dashboard setIsAuthenticated={setIsSignedIn} />
+  ) : (
+    <SignIn setIsAuthenticated={setIsSignedIn} />
+  );
+};
 
 export default App;

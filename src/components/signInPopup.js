@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
-import './signInPopup.css';
+import React, { useState, useContext } from 'react';
+import './signInPopup.css'
 import CustomizedSnackbars from './toastNotification';
 import axios from 'axios';
+import AuthContext from './AuthContext';
 
-function SignInPopup({ setIsSignIn }) {
+function SignInPopup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: '' });
-  
-
-
-  
+  const { setIsSignedIn } = useContext(AuthContext);
 
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
@@ -42,7 +40,7 @@ function SignInPopup({ setIsSignIn }) {
           localStorage.setItem('authToken', user.username);
           localStorage.setItem('user', JSON.stringify(user));
           setSnackbar({ open: true, message: 'Sign in successful', severity: 'success' });
-          
+          setIsSignedIn(true);
         } else {
           setSnackbar({ open: true, message: 'Invalid username or password', severity: 'error' });
         }
