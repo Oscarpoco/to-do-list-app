@@ -1,44 +1,23 @@
 {
   "users": [
     {
-      "id": "80da",
-      "username": "oscar@gmail.com",
-      "password": "oscar",
-      "task":[]
+      "id": "4c65",
+      "username": "oscarpoco15@gmail.com",
+      "password": "Oscar@2000"
     },
     {
-      "id": "08d0",
-      "username": "kid@gmail.com",
-      "password": "kyle"
+      "id": "f410",
+      "username": "oscarpoco15@gmail.com",
+      "password": "Oscar@2000"
     },
     {
-      "id": "d5fc",
-      "username": "kyle@gmail.com",
-      "password": "kyle12"
-    },
-    {
-      "id": "5789",
-      "username": "okpoco15@gmail.com",
-      "password": "oscarpoco"
-    },
-    {
-      "id": "2fe9",
-      "username": "okpoco12@gmail.com",
-      "password": "oscar"
-    },
-    {
-      "id": "c155",
-      "username": "okpoco12@gmail.com",
-      "password": "oscar"
-    },
-    {
-      "id": "dc2b",
-      "username": "okpoco12@gmail.com",
-      "password": "oscar"
+      "id": "5a5b",
+      "username": "oscarpoco15@gmail.com",
+      "password": "Oscar@2000"
     }
   ],
 
   "task": [
-
+    
   ]
 }

@@ -87,7 +87,7 @@
 
 .bottom button:hover
 {
-    background-color: #e3f2fd;
+    background-color: lightblue;
     transition: all .7s ease-in-out;
 }
 .to-do-box
@@ -121,10 +121,11 @@
 .searchNav #search
 {
     outline: none;
-    border: 2px solid #fff;
+    border: 2px solid lightblue;
     border-radius: 5px;
-    background-color: inherit;
+    background-color: lightblue;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 .searchNav .profile
@@ -155,7 +156,7 @@
 
 .profile button:hover
 {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: lightblue;
     transition: all .7s ease-in-out;
     color: black;
 }
@@ -174,6 +175,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
+    cursor: pointer;
 }
 
 .circle img
@@ -224,30 +226,33 @@
 .task-descriptions
 {
     width: 50%;
-    height: 100%;
+    height: 75%;
     display: flex;
+    border-radius: 5px;
     justify-content: start;
     align-items: center;
-    background-color: inherit;
+    background-color: lightblue;
     
 }
 
 .task-descriptions input
 {
     width: 100%;
-    height: 75%;
+    height: 100%;
     border: none;
     border-radius: 5px;
     padding-left: 10px;
-    background-color: inherit;
+    background-color: lightblue;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
 
 .task-date
 {
     width: 15%;
-    height: 100%;
-    background-color: inherit;
+    height: 75%;
+    border-radius: 5px;
+    background-color: lightblue;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -257,19 +262,20 @@
 .task-date input
 {
     width: 100%;
-    height: 80%;
+    height: 100%;
     padding: 0 20px;
     border: none ;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    background-color: inherit;
+    background-color: lightblue;
+    cursor: pointer;
 }
 
 .task-priority
 {
     width: 12%;
-    height: 80%;
-    background-color: inherit;
+    height: 75%;
+    background-color: lightblue;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     display: flex;
@@ -284,12 +290,14 @@ select
     text-align: center;
     border: none;
     text-align: center;
+    background-color: lightblue;
+    cursor: pointer;
 }
 
 option
 {
     outline: none;
-    border: none;
+    background-color: inherit;
 }
 
 label
@@ -301,24 +309,26 @@ label
     align-items: center;
     font-size: 80%;
     text-align: center;
+    background-color: lightblue;
 }
 
 .task-button
 {
     width: 14%;
-    height: 90%;
-    background-color: inherit;
+    height: 75%;
+    background-color: rgba(255, 255, 255, 0.7);
     display: flex;
     justify-content: end;
     align-items: center;
-    
+    border-radius: 5px;
 }
 
 .task-button button
 {
-    width: 75%;
+    width: 100%;
     height: 90%;
     border: none;
+    cursor: pointer;
     border-radius: 5px;
     display: flex;
     justify-content: center;
@@ -330,7 +340,7 @@ label
 
 .task-button button:hover
 {
-    background-color: #e3f2fd;
+    background-color: lightblue;
     transition: all 0.7s ease-in-out;
 }
 
@@ -384,7 +394,7 @@ label
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.5em;
+    gap: 0.3em;
     border-radius: 5px;
     padding: 0 5px;
 }
@@ -400,13 +410,13 @@ label
 .task-info p
 {
     border: 1px solid whitesmoke;
-    height: auto;
+    height: 90px;
     width: 100%;
     border-radius: 5px;
     display: flex;
-    justify-content: center;
+    padding-left: 5px;
     align-items: center;
-    text-align: center;
+    text-align: left;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     background-color: whitesmoke;
     overflow-Y: auto;

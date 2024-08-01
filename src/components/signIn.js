@@ -15,6 +15,11 @@ import Loader from './Loader';
 function SignIn({ setIsAuthenticated }) {
     const [isSignIn, setIsSignIn] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
+    const [backgroundColor, setBackgroundColor] = useState('white');
+
+    const toggleBackgroundColor = () => {
+        setBackgroundColor(prevColor => (prevColor === 'white' ? 'lightblue' : 'white'));
+    };
 
     const handleSignInClick = () => {
         setIsSignIn(true);
@@ -39,9 +44,14 @@ function SignIn({ setIsAuthenticated }) {
     }
 
     return (
-        <div className='sign-in'>
+        <div className='sign-in' style={{ backgroundColor: backgroundColor }}>
             <div className='logo'>
                 <h3>Lis<span>tify</span> <LuListTodo className='icon'/></h3>
+                <div className="mode">
+                    <button onClick={toggleBackgroundColor} style={{ marginBottom: '20px' }}>
+                         Mode
+                    </button>
+                </div>
             </div>
 
             <div className='display-sign-content'>

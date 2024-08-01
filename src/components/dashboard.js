@@ -5,7 +5,6 @@ import { LuListTodo } from "react-icons/lu";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { MdOutlinePendingActions } from "react-icons/md";
-import CurrentTime from './CurrentTime';
 import SearchInput from './search';
 import UserPopup from './UserPopup';
 import Loader from './Loader';
@@ -134,7 +133,6 @@ function Dashboard({ setIsAuthenticated }) {
           </div>
         </div>
         <div className='middle'>
-          <CurrentTime />
         </div>
         <div className='bottom'>
           <button onClick={handleLogout}><RiLogoutBoxLine className='icon' /> Logout</button>

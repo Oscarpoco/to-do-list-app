@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import './signUpPopup.css';
 import CustomizedSnackbars from './toastNotification';
 
-function SignUpPopup({ setIsSignIn }) {
+function SignUpPopup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -49,10 +49,6 @@ function SignUpPopup({ setIsSignIn }) {
     return isProceed;
   };
 
-  const login = ()=>{
-    setIsSignIn(true);
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault();
 
@@ -72,7 +68,6 @@ function SignUpPopup({ setIsSignIn }) {
       }).then((res) => {
         if (res.ok) {
           setSnackbar({ open: true, message: 'Sign up successful', type: 'success' });
-          login();
 
         } else {
           setSnackbar({ open: true, message: 'Sign up failed', type: 'error' });
