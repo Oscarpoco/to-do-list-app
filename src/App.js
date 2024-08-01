@@ -3,23 +3,13 @@ import './App.css';
 import { useState } from 'react';
 import Dashboard from './components/dashboard';
 import SignIn from './components/signIn';
-import Loader from './components/Loader';
 
 function App() {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(true);
 
   const handleAuthentication = (status) => {
-    setIsLoading(true);
-    setTimeout(() => {
-      setIsAuthenticated(status);
-      setIsLoading(false);
-    }, 2000);
+    setIsAuthenticated(status);
   };
-
-  if (isLoading) {
-    return <Loader name="Processing" />;
-  }
 
   return (
     <div className="App">

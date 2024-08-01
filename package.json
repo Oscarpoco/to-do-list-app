@@ -19,6 +19,7 @@
     "better-sqlite3": "^11.1.2",
     "dayjs": "^1.11.12",
     "express": "^4.19.2",
+    "my-website": "file:",
     "path-browserify": "^1.0.1",
     "react": "^18.3.1",
     "react-app-rewired": "^2.2.1",
@@ -27,7 +28,9 @@
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.25.1",
     "react-scripts": "5.0.1",
+    "react-toastify": "^10.0.5",
     "react-transition-group": "^4.4.5",
+    "toastify-js": "^1.12.0",
     "util": "^0.12.5",
     "web-vitals": "^2.1.4"
   },
@@ -36,7 +39,7 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "client": "react-scripts start",
-    "start": "concurrently \"npm run client\" \"npx json-server --watch db.json --port 3004\""
+    "start": "concurrently \"npm run client\" \"npx json-server --watch db.json --port 3030\""
   },
   "eslintConfig": {
     "extends": [

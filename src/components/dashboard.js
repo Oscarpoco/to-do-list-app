@@ -30,7 +30,7 @@ function Dashboard({ setIsAuthenticated }) {
 
 
   useEffect(() => {
-    // Simulate loading delay for the dashboard
+    
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
