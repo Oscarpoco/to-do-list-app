@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import './signInPopup.css';
 import CustomizedSnackbars from './toastNotification';
+import axios from 'axios';
 
 function SignInPopup({ setIsSignIn }) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: '' });
+  
+
+
+  
 
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
@@ -25,26 +30,25 @@ function SignInPopup({ setIsSignIn }) {
     return true;
   };
 
-  const proceedLogin = (e) => {
+  const proceedLogin = async (e) => {
     e.preventDefault();
     if (validate()) {
-      fetch(`http://localhost:3030/users/${username}`)
-        .then((res) => res.json())
-        .then((resp) => {
-          if (Object.keys(resp).length === 0) {
-            setSnackbar({ open: true, message: "User not found", severity: 'error' });
-          } else {
-            if (resp.password === password) {
-              setSnackbar({ open: true, message: 'Sign in successful', severity: 'success' });
-              setIsSignIn(true);
-            } else {
-              setSnackbar({ open: true, message: 'Incorrect password', severity: 'error' });
-            }
-          }
-        })
-        .catch((err) => {
-          setSnackbar({ open: true, message: 'Error: ' + err.message, severity: 'error' });
-        });
+      try {
+        const response = await axios.get('http://localhost:3030/users');
+        const users = response.data;
+
+        const user = users.find(user => user.username === username && user.password === password);
+        if (user) {
+          localStorage.setItem('authToken', user.username);
+          localStorage.setItem('user', JSON.stringify(user));
+          setSnackbar({ open: true, message: 'Sign in successful', severity: 'success' });
+          
+        } else {
+          setSnackbar({ open: true, message: 'Invalid username or password', severity: 'error' });
+        }
+      } catch (err) {
+        setSnackbar({ open: true, message: 'Error: ' + err.message, severity: 'error' });
+      }
     }
   };
 
