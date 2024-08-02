@@ -45,7 +45,7 @@ function UserPopup({ profile, onClose, onProfileChange }) {
   return (
     <div className='user-popup'>
       <div className='user-popup-content'>
-        <button className='close-button' onClick={onClose}>X</button>
+        <button className='close-button' onClick={onClose}>+</button>
         <form onSubmit={handleSubmit}>
           <div className='form-field'>
             <label>Username</label>
