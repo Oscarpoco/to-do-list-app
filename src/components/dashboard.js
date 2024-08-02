@@ -1,6 +1,7 @@
 // Dashboard.jsx
 import './dashboard.css';
 import React, { useState, useEffect } from 'react';
+import axios from 'axios'; // Import Axios
 import { LuListTodo } from "react-icons/lu";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -27,14 +28,25 @@ function Dashboard({ setIsAuthenticated }) {
     password: ''
   });
 
-
   useEffect(() => {
-    
     const timer = setTimeout(() => {
       setIsLoading(false);
     }, 2000);
 
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        const response = await axios.get('http://localhost:3030/tasks');
+        setTasks(response.data);
+      } catch (error) {
+        console.error("There was an error fetching the tasks!", error);
+      }
+    };
+
+    fetchTasks();
   }, []);
 
   const togglePopup = () => {
@@ -66,21 +78,33 @@ function Dashboard({ setIsAuthenticated }) {
     setPriority(e.target.value);
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     if (task && date && priority !== "none") {
+      const newTask = { task, date, priority };
+
       if (isEditing) {
-        const updatedTasks = tasks.map((t, index) =>
-          index === editIndex ? { task, date, priority } : t
-        );
-        setTasks(updatedTasks);
-        setIsEditing(false);
-        setEditIndex(null);
+        try {
+          const response = await axios.put(`http://localhost:3030/tasks/${tasks[editIndex].id}`, newTask);
+          const updatedTasks = tasks.map((t, index) =>
+            index === editIndex ? response.data : t
+          );
+          setTasks(updatedTasks);
+          setIsEditing(false);
+          setEditIndex(null);
+        } catch (error) {
+          console.error("There was an error updating the task!", error);
+        }
       } else {
-        const newTask = { task, date, priority };
-        setTasks([...tasks, newTask]);
+        try {
+          const response = await axios.post('http://localhost:3030/tasks', newTask);
+          setTasks([...tasks, response.data]);
+        } catch (error) {
+          console.error("There was an error adding the task!", error);
+        }
       }
+
       setTask("");
       setDate("");
       setPriority("none");
@@ -98,9 +122,14 @@ function Dashboard({ setIsAuthenticated }) {
     setEditIndex(index);
   };
 
-  const handleDelete = (index) => {
-    const updatedTasks = tasks.filter((_, i) => i !== index);
-    setTasks(updatedTasks);
+  const handleDelete = async (index) => {
+    try {
+      await axios.delete(`http://localhost:3030/tasks/${tasks[index].id}`);
+      const updatedTasks = tasks.filter((_, i) => i !== index);
+      setTasks(updatedTasks);
+    } catch (error) {
+      console.error("There was an error deleting the task!", error);
+    }
   };
 
   const handleProfileChange = (updatedProfile) => {

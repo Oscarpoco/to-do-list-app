@@ -1,11 +1,74 @@
 {
   "users": [
     {
-      "id": "eea1",
+      "id": 1,
+      "username": "johndoe",
+      "password": "123456",
+      "picture": "path/to/profile.jpg",
+      "tasks": [
+        {
+          "id": 1,
+          "task": "Buy groceries",
+          "date": "2023-08-01",
+          "priority": "High"
+        }
+      ]
+    },
+    {
+      "id": "16a7",
       "username": "okpoco15@gmail.com",
       "password": "Oscar@20000-12"
     }
   ],
-  "task": [
+  "tasks": [
+    {
+      "id": 1,
+      "task": "Buy groceries",
+      "date": "2023-08-01",
+      "priority": "High",
+      "userId": 1
+    },
+    {
+      "id": "1c61",
+      "task": "Implement Database using JSON SERVER",
+      "date": "2024-08-07",
+      "priority": "Medium"
+    },
+    {
+      "id": "f18f",
+      "task": "Implement Database using JSON SERVER",
+      "date": "2024-08-08",
+      "priority": "Low"
+    },
+    {
+      "id": "53aa",
+      "task": "Implement Database using JSON SERVER delete Implement Database using JSON SERVER delete Implement Database using JSON SERVER delete Implement Database using JSON SERVER delete",
+      "date": "2024-08-28",
+      "priority": "Low"
+    },
+    {
+      "id": "03b9",
+      "task": "Implement Database using JSON SERVER",
+      "date": "2024-08-06",
+      "priority": "Low"
+    },
+    {
+      "id": "a5e2",
+      "task": "Implement Database using JSON SERVER",
+      "date": "2024-08-07",
+      "priority": "Low"
+    },
+    {
+      "id": "71e1",
+      "task": "Implement Database using JSON SERVER",
+      "date": "2024-08-08",
+      "priority": "Medium"
+    },
+    {
+      "id": "7970",
+      "task": "Implement Database ",
+      "date": "2024-08-08",
+      "priority": "Medium"
+    }
   ]
 }
