@@ -106,6 +106,13 @@
     padding: 7px 15px;
     color: #fff;
   }
+
+  form button:hover
+  {
+    background-color: #fff;
+    transition: all .7s ease-out;
+    color: black;
+  }
   
   
 

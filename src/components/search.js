@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSearch } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faSearch } from '@fortawesome/free-solid-svg-icons';
+import { TbListSearch } from "react-icons/tb";
 
 const SearchInput = () => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -28,8 +29,8 @@ const SearchInput = () => {
       {isSearchVisible ? (
         <input type="text" id="search" placeholder="Search" style={styles.input} />
       ) : (
-        <FontAwesomeIcon
-          icon={faSearch}
+        <TbListSearch
+          icon={TbListSearch}
           onClick={handleIconClick}
           style={styles.icon}
         />
@@ -44,11 +45,11 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'start',
     position: 'relative',
-    width: '70%', 
+    width: '100%', 
     height: '50%', 
   },
   icon: {
-    fontSize: '1.2rem',
+    fontSize: '2rem',
     cursor: 'pointer',
   },
   input: {

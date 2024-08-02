@@ -73,7 +73,7 @@
 {
     width: 80%;
     height: 80%;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(188, 187, 187, 0.334);
     border: none;
     font-size: 70%;
     border-radius: 5px;
@@ -135,16 +135,16 @@
     display: flex;
     justify-content: end;
     align-items: center;
-    gap: 0.6em;
+    gap: 0.3em;
 }
 
 .profile button
 {
-    height: 80%;
-    width: 45%;
+    height: 78%;
+    width: 35%;
     border-radius: 5px;
-    border: #2196f3;
-    background-color: #2196f3;
+    border: lightblue;
+    background-color: lightblue;
     font-size: 70%;
     display: flex;
     justify-content: center;
@@ -156,7 +156,7 @@
 
 .profile button:hover
 {
-    background-color: lightblue;
+    background-color: rgba(148, 147, 147, 0.981);
     transition: all .7s ease-in-out;
     color: black;
 }
@@ -414,7 +414,7 @@ label
 
 .task-info p
 {
-    border: 1px solid whitesmoke;
+    /* border: 1px solid lightblue; */
     height: 90px;
     width: 100%;
     border-radius: 5px;
@@ -423,7 +423,7 @@ label
     align-items: center;
     text-align: left;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-    background-color: whitesmoke;
+    background-color: inherit;
     overflow-Y: auto;
     flex-wrap: wrap;
 }
@@ -431,18 +431,17 @@ label
 .task-info p::-webkit-scrollbar 
 {
     width: 8px;
+    /* box-shadow: 0 0 4px rgba(0, 0, 0, 0.1); */
 }
   
 .task-info p::-webkit-scrollbar-track 
 {
     background: grey;
-    border-radius: 5px;
 }
   
 .task-info p::-webkit-scrollbar-thumb 
 {
     background:  #e3f2fd;
-    border-radius: 5px;
 }
 
 .task-actions
@@ -579,7 +578,9 @@ label
 
     .bottom button 
     {
-        font-size: 50%;
+        font-size: 65%;
+        color: black;
+        background-color: #fff;
     }
 
     .to-do-box
@@ -599,6 +600,11 @@ label
     .searchNav #search
     {
         width: 50%;
+    }
+
+    .searchNav #search .icon
+    {
+        font-size: 100%;
     }
 
     .searchNav .profile
@@ -652,7 +658,7 @@ label
 
     .task-date input
     {
-        width: 5%;
+        width: 60%;
         border-radius: 2px;
         font-size: 30px;
         outline: none;
@@ -665,7 +671,7 @@ label
     }
     select 
     {
-        background-color: #fff;
+        background-color: lightblue;
     }
 
     .task-button
