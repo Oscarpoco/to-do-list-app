@@ -1,74 +1,44 @@
 {
   "users": [
     {
-      "id": 1,
-      "username": "johndoe",
-      "password": "123456",
-      "picture": "path/to/profile.jpg",
-      "tasks": [
-        {
-          "id": 1,
-          "task": "Buy groceries",
-          "date": "2023-08-01",
-          "priority": "High"
-        }
-      ]
-    },
-    {
       "id": "16a7",
       "username": "okpoco15@gmail.com",
       "password": "Oscar@20000-12"
+    },
+    {
+      "id": "95ec",
+      "username": "oscar@gmail.com",
+      "password": "Kyle@oscar12"
     }
   ],
   "tasks": [
     {
-      "id": 1,
-      "task": "Buy groceries",
-      "date": "2023-08-01",
+      "id": "04ad",
+      "task": "Implement Database using JSON SERVER",
+      "date": "2024-08-04",
       "priority": "High",
-      "userId": 1
+      "userId": null
     },
     {
-      "id": "1c61",
-      "task": "Implement Database using JSON SERVER",
-      "date": "2024-08-07",
-      "priority": "Medium"
-    },
-    {
-      "id": "f18f",
-      "task": "Implement Database using JSON SERVER",
-      "date": "2024-08-08",
-      "priority": "Low"
-    },
-    {
-      "id": "53aa",
+      "id": "4981",
       "task": "Implement Database using JSON SERVER delete Implement Database using JSON SERVER delete Implement Database using JSON SERVER delete Implement Database using JSON SERVER delete",
-      "date": "2024-08-28",
-      "priority": "Low"
-    },
-    {
-      "id": "03b9",
-      "task": "Implement Database using JSON SERVER",
       "date": "2024-08-06",
-      "priority": "Low"
+      "priority": "Low",
+      "userId": null
     },
     {
-      "id": "a5e2",
-      "task": "Implement Database using JSON SERVER",
-      "date": "2024-08-07",
-      "priority": "Low"
-    },
-    {
-      "id": "71e1",
-      "task": "Implement Database using JSON SERVER",
-      "date": "2024-08-08",
-      "priority": "Medium"
-    },
-    {
-      "id": "7970",
+      "id": "3983",
       "task": "Implement Database ",
-      "date": "2024-08-08",
-      "priority": "Medium"
+      "date": "2024-08-21",
+      "priority": "Medium",
+      "userId": null
+    },
+    {
+      "id": "e375",
+      "task": "Implement Database using JSON SERVER",
+      "date": "2024-08-10",
+      "priority": "Low",
+      "userId": null
     }
   ]
 }

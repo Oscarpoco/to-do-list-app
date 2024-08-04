@@ -1,7 +1,7 @@
 // Dashboard.jsx
 import './dashboard.css';
 import React, { useState, useEffect } from 'react';
-import axios from 'axios'; // Import Axios
+import axios from 'axios';
 import { LuListTodo } from "react-icons/lu";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -28,6 +28,9 @@ function Dashboard({ setIsAuthenticated }) {
     password: ''
   });
 
+  // Assume we get the logged-in user's ID from local storage or another source
+  const userId = localStorage.getItem('userId');
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsLoading(false);
@@ -39,7 +42,7 @@ function Dashboard({ setIsAuthenticated }) {
   useEffect(() => {
     const fetchTasks = async () => {
       try {
-        const response = await axios.get('http://localhost:3030/tasks');
+        const response = await axios.get(`http://localhost:3030/tasks?userId=${userId}`);
         setTasks(response.data);
       } catch (error) {
         console.error("There was an error fetching the tasks!", error);
@@ -47,7 +50,7 @@ function Dashboard({ setIsAuthenticated }) {
     };
 
     fetchTasks();
-  }, []);
+  }, [userId]);
 
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
@@ -82,7 +85,7 @@ function Dashboard({ setIsAuthenticated }) {
     e.preventDefault();
 
     if (task && date && priority !== "none") {
-      const newTask = { task, date, priority };
+      const newTask = { task, date, priority, userId };
 
       if (isEditing) {
         try {
@@ -173,7 +176,7 @@ function Dashboard({ setIsAuthenticated }) {
             <SearchInput />
           </div>
           <div className='profile'>
-            <button onClick={toggleFormVisibility}><span>+</span> New</button>
+            <button onClick={toggleFormVisibility}><span>+</span></button>
             <div className='circle' onClick={togglePopup}>
               {profile.picture ? (
                 <img src={profile.picture} alt='Profile' className='profile-picture' />

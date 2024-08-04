@@ -73,11 +73,12 @@
 {
     width: 80%;
     height: 80%;
-    background-color: rgba(188, 187, 187, 0.334);
+    background-color: red;
     border: none;
-    font-size: 70%;
+    font-size: 100%;
     border-radius: 5px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    color: white;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -85,11 +86,6 @@
     gap: 0.2em;
 }
 
-.bottom button:hover
-{
-    background-color: lightblue;
-    transition: all .7s ease-in-out;
-}
 .to-do-box
 {
     height: 100%;
@@ -112,20 +108,28 @@
 
 .searchNav .search
 {
-    width: 50%;
+    width: 80%;
     height: 80%;
     display: flex;
+    justify-content: center;
     align-items: center;
+    /* background-color: blue; */
 }
 
 .searchNav #search
 {
     outline: none;
-    border: 2px solid lightblue;
-    border-radius: 5px;
-    background-color: lightblue;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
+    border: none;
+    text-align: center;
+    border-radius: 50px;
+    background-color: rgba(0, 0, 0, 0.2);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     cursor: pointer;
+}
+
+.searchNav #search:focus
+{
+    border: 1px solid red;
 }
 
 .searchNav .profile
@@ -142,29 +146,26 @@
 {
     height: 78%;
     width: 35%;
-    border-radius: 5px;
-    border: lightblue;
-    background-color: lightblue;
-    font-size: 70%;
+    border: none;
+    background-color: inherit;
+    display: flex;
+    justify-content: end;
+    align-items: center;
+}
+
+.profile span
+{
+    font-size: 40px;
+    font-weight: bold;
+    color: green;
+    cursor: pointer;
+    border: 2px solid #e3f2fd;
+    width: 35px;
+    height: 35px;
+    border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 0.5em;
-    cursor: pointer;
-    color: #e3f2fd;
-}
-
-.profile button:hover
-{
-    background-color: rgba(148, 147, 147, 0.981);
-    transition: all .7s ease-in-out;
-    color: black;
-}
-.profile span
-{
-    font-size: 18px;
-    font-weight: bold;
-    color: black;
 }
 
 .circle
@@ -176,6 +177,7 @@
     justify-content: center;
     align-items: center;
     cursor: pointer;
+    border: 2px solid #e3f2fd;
 }
 
 .circle img
@@ -220,7 +222,7 @@
     justify-content: space-between;
     align-items: center;
     gap: 0.3em;
-    
+    border-color: inherit;
 }
 
 .task-descriptions
@@ -231,7 +233,7 @@
     border-radius: 5px;
     justify-content: start;
     align-items: center;
-    background-color: lightblue;
+    background-color: inherit;
     
 }
 
@@ -239,10 +241,10 @@
 {
     width: 100%;
     height: 100%;
-    border: none;
+    border: 1px solid black;
     border-radius: 5px;
     padding-left: 10px;
-    background-color: lightblue;
+    background-color: inherit;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     cursor: pointer;
 }
@@ -252,7 +254,7 @@
     width: 15%;
     height: 75%;
     border-radius: 5px;
-    background-color: lightblue;
+    background-color: inherit;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -264,10 +266,10 @@
     width: 100%;
     height: 100%;
     padding: 0 20px;
-    border: none ;
+    border: 1px solid black;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    background-color: lightblue;
+    background-color: inherit;
     cursor: pointer;
 }
 
@@ -275,23 +277,26 @@
 {
     width: 12%;
     height: 75%;
-    background-color: lightblue;
+    background-color: inherit;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
+    border: 1px solid black;
 }
 
 select
 {
     width: 15%;
     height: 100%;
+    font-size: 18px;
     text-align: center;
-    border: none;
     text-align: center;
-    background-color: lightblue;
+    background-color: inherit;
     cursor: pointer;
+    outline: none;
+    border: none;
 }
 
 option
@@ -309,14 +314,14 @@ label
     align-items: center;
     font-size: 80%;
     text-align: center;
-    background-color: lightblue;
+    background-color: inherit;
 }
 
 .task-button
 {
     width: 14%;
     height: 75%;
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: inherit;
     display: flex;
     justify-content: end;
     align-items: center;
@@ -327,16 +332,18 @@ label
 {
     width: 70%;
     height: 90%;
-    border: none;
+    border: 3px solid red;
+    border-bottom: none;
+    border-top: none;
     cursor: pointer;
     border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-    background-color: rgb(5, 194, 5);
+    background-color: inherit;
+    color: green;
     font-size: 80%;
-    /* color: black; */
     font-weight: bold;
 }
 
@@ -368,8 +375,8 @@ label
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 80%;
-    /* gap: 0.4em; */
+    font-size: 100%;
+    gap: 0.4em;
 }
 
 .title .icon
@@ -389,8 +396,6 @@ label
     display: flex;
     flex-direction: column;
     gap: 0.5em;
-    /* justify-content: space-between; */
-    /* align-items: center; */
 }
 
 .task-item
@@ -414,7 +419,6 @@ label
 
 .task-info p
 {
-    /* border: 1px solid lightblue; */
     height: 90px;
     width: 100%;
     border-radius: 5px;
@@ -431,7 +435,6 @@ label
 .task-info p::-webkit-scrollbar 
 {
     width: 8px;
-    /* box-shadow: 0 0 4px rgba(0, 0, 0, 0.1); */
 }
   
 .task-info p::-webkit-scrollbar-track 
@@ -509,11 +512,11 @@ label
 
 .pending .title
 {
-    background-color: lightblue;
-    border: 2px solid lightblue;
+    background-color: black;
+    border: 2px solid black;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     border-radius: 5px;
-    color: black;
+    color: white;
 }
 
 
@@ -579,8 +582,6 @@ label
     .bottom button 
     {
         font-size: 65%;
-        color: black;
-        background-color: #fff;
     }
 
     .to-do-box
@@ -671,7 +672,7 @@ label
     }
     select 
     {
-        background-color: lightblue;
+        background-color: inherit;
     }
 
     .task-button

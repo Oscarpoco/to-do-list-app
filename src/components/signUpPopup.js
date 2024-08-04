@@ -100,7 +100,7 @@ function SignUpPopup() {
           onChange={e => setConfirmPassword(e.target.value)}
           placeholder='Confirm Password'
         />
-        <button type='submit'>Sign Up</button>
+        <button type='submit'>submit</button>
       </form>
       <CustomizedSnackbars
         open={snackbar.open}

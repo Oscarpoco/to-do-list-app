@@ -13,8 +13,9 @@ const Loader = () => {
       alignItems="center" 
       justifyContent="center" 
       height="90vh"
+
     >
-      <CircularProgress />
+      <CircularProgress style={{color: 'red'}}/>
       <Typography variant="h6" component="div" marginTop={2}>
         <div className='logo'>
         <h3>Lis<span>tify</span><LuListTodo className='icon' /></h3>

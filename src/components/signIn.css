@@ -76,7 +76,7 @@
 }
 span
 {
-    color: #03a9f4;
+    color: red;
 }
 
 .slogan
@@ -120,33 +120,29 @@ span
     height:65%;
     width: 30%;
     font-weight: bold;
-    border: 2px solid lightblue;
+    border: 2px solid rgba(255, 255, 255, 0.7);
     border-radius: 5px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: lightblue;
+    background-color: rgba(255, 255, 255, 0.7);
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
     gap: 0.5em;
+    cursor: pointer;
 }
 
 .signIn-Nav button:focus
 {
-    background-color: #e3f2fd;
-    border: 2px solid #e3f2fd;
+    background-color: silver;
+    border: 2px solid silver;
 }
 
-.signIn-Nav button:hover
-{
-    background-color: #e3f2fd;
-    transition: all .7s ease-in-out;
-    border: #e3f2fd;
-}
 
 .signIn-Nav .icon
 {
-    font-size: 13px;
-    color: #9d8f16;
+    font-size: 15px;
+    color: red;
+    font-weight: bold;
 }
 
 
@@ -167,7 +163,7 @@ footer
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 0.3em;
+    gap: 0.5em;
     background-color: inherit;
 }
 
@@ -180,14 +176,23 @@ footer
     align-items: center;
     gap: 1.7em;
     border-bottom: 1px solid black;
-    color: black;
-    font-size: 14px;
+    color: red;
+    cursor: pointer;
+    font-size: 10px;
+    padding: 5px 0;
 }
 
-.social:hover
+.social 
 {
-  color: lightblue;
-  transition: all .7s ease-in-out;
+  border: 1px solid red;
+  background-color: black;
+  height: 15px;
+  width: 15px;
+  border-radius: 50%;
+  padding: 5px 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .developer
@@ -199,7 +204,6 @@ footer
   align-items: center;
   color: black;
   font-size: 80%;
-  /* gap: 0.3em; */
 }
 
 

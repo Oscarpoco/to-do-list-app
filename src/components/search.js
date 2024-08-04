@@ -27,7 +27,7 @@ const SearchInput = () => {
   return (
     <div ref={searchRef} style={styles.container}>
       {isSearchVisible ? (
-        <input type="text" id="search" placeholder="Search" style={styles.input} />
+        <input type="text" id="search" placeholder="Search task by keyword" style={styles.input} />
       ) : (
         <TbListSearch
           icon={TbListSearch}
@@ -49,14 +49,17 @@ const styles = {
     height: '50%', 
   },
   icon: {
-    fontSize: '2rem',
+    fontSize: '1.8rem',
     cursor: 'pointer',
+    color: 'black',
   },
   input: {
-    width: '100%',
+    width: '70%',
     height: '100%',
-    padding: '5px',
+    padding: '9px 0',
     fontSize: '.7rem',
+    position: 'absolute',
+    right: '60px'
   },
 };
 
