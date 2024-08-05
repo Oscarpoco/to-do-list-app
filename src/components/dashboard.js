@@ -17,6 +17,7 @@ function Dashboard({ setIsAuthenticated }) {
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [tasks, setTasks] = useState([]);
+  const [filteredTasks, setFilteredTasks] = useState([]);
   const [task, setTask] = useState("");
   const [date, setDate] = useState("");
   const [priority, setPriority] = useState("none");
@@ -54,6 +55,7 @@ function Dashboard({ setIsAuthenticated }) {
       try {
         const response = await axios.get(`http://localhost:3030/tasks?userId=${userId}`);
         setTasks(response.data);
+        setFilteredTasks(response.data);
       } catch (error) {
         console.error("There was an error fetching the tasks!", error);
       }
@@ -105,6 +107,7 @@ function Dashboard({ setIsAuthenticated }) {
             index === editIndex ? response.data : t
           );
           setTasks(updatedTasks);
+          setFilteredTasks(updatedTasks);
           setIsEditing(false);
           setEditIndex(null);
         } catch (error) {
@@ -113,7 +116,9 @@ function Dashboard({ setIsAuthenticated }) {
       } else {
         try {
           const response = await axios.post('http://localhost:3030/tasks', newTask);
-          setTasks([...tasks, response.data]);
+          const newTasks = [...tasks, response.data];
+          setTasks(newTasks);
+          setFilteredTasks(newTasks);
         } catch (error) {
           console.error("There was an error adding the task!", error);
         }
@@ -127,7 +132,7 @@ function Dashboard({ setIsAuthenticated }) {
   };
 
   const handleEdit = (index) => {
-    const taskToEdit = tasks[index];
+    const taskToEdit = filteredTasks[index];
     setTask(taskToEdit.task);
     setDate(taskToEdit.date);
     setPriority(taskToEdit.priority);
@@ -138,9 +143,10 @@ function Dashboard({ setIsAuthenticated }) {
 
   const handleDelete = async (index) => {
     try {
-      await axios.delete(`http://localhost:3030/tasks/${tasks[index].id}`);
-      const updatedTasks = tasks.filter((_, i) => i !== index);
+      await axios.delete(`http://localhost:3030/tasks/${filteredTasks[index].id}`);
+      const updatedTasks = filteredTasks.filter((_, i) => i !== index);
       setTasks(updatedTasks);
+      setFilteredTasks(updatedTasks);
     } catch (error) {
       console.error("There was an error deleting the task!", error);
     }
@@ -160,6 +166,17 @@ function Dashboard({ setIsAuthenticated }) {
         return "rgba(0, 128, 0, 0.277)";
       default:
         return "white";
+    }
+  };
+
+  const searchTasks = (searchTerm) => {
+    if (searchTerm === "") {
+      setFilteredTasks(tasks);
+    } else {
+      const filtered = tasks.filter(task =>
+        task.task.toLowerCase().includes(searchTerm.toLowerCase())
+      );
+      setFilteredTasks(filtered);
     }
   };
 
@@ -184,7 +201,7 @@ function Dashboard({ setIsAuthenticated }) {
       <div className='to-do-box'>
         <div className='searchNav'>
           <div className='search'>
-            <SearchInput />
+            <SearchInput searchTasks={searchTasks} />
           </div>
           <div className='profile'>
             <button onClick={toggleFormVisibility}><span>+</span></button>
@@ -243,7 +260,7 @@ function Dashboard({ setIsAuthenticated }) {
               My Tasks <MdOutlinePendingActions className='icon'/>
             </div>
             <div className='tasks'>
-              {tasks.map((task, index) => (
+              {filteredTasks.map((task, index) => (
                 <div 
                   key={index} 
                   className='task-item' 

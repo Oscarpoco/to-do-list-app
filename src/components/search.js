@@ -1,10 +1,9 @@
 import React, { useState, useRef, useEffect } from 'react';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faSearch } from '@fortawesome/free-solid-svg-icons';
 import { TbListSearch } from "react-icons/tb";
 
-const SearchInput = () => {
+const SearchInput = ({ searchTasks }) => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
   const searchRef = useRef(null);
 
   const handleIconClick = () => {
@@ -14,7 +13,14 @@ const SearchInput = () => {
   const handleClickOutside = (event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
       setIsSearchVisible(false);
+      setSearchTerm(""); // Clear search term when clicking outside
+      searchTasks(""); // Reset the task list
     }
+  };
+
+  const handleChange = (event) => {
+    setSearchTerm(event.target.value);
+    searchTasks(event.target.value);
   };
 
   useEffect(() => {
@@ -27,10 +33,16 @@ const SearchInput = () => {
   return (
     <div ref={searchRef} style={styles.container}>
       {isSearchVisible ? (
-        <input type="text" id="search" placeholder="Search task by keyword" style={styles.input} />
+        <input 
+          type="text" 
+          id="search" 
+          placeholder="Search task by keyword" 
+          style={styles.input} 
+          value={searchTerm}
+          onChange={handleChange}
+        />
       ) : (
         <TbListSearch
-          icon={TbListSearch}
           onClick={handleIconClick}
           style={styles.icon}
         />

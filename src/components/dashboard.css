@@ -584,7 +584,14 @@ label
 
     .bottom button 
     {
-        font-size: 65%;
+        width: 100%;
+        height: 70%;
+        font-size: 70%;
+    }
+
+    .bottom button .icon
+    {
+        font-size: 100%;
     }
 
     .to-do-box
@@ -603,7 +610,7 @@ label
 
     .searchNav #search
     {
-        width: 50%;
+        width: 100%;
     }
 
     .searchNav #search .icon
@@ -613,13 +620,16 @@ label
 
     .searchNav .profile
     {
-        width: 50%;
+        width: 30%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
     }
 
     .profile button 
     {
         height: 90%;
-        width: 40%;
+        width: 60%; 
         font-size: auto;
     }
 
