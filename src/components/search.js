@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { TbListSearch } from "react-icons/tb";
+import { TbBorderRadius, TbListSearch } from "react-icons/tb";
 
 const SearchInput = ({ searchTasks }) => {
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -61,9 +61,12 @@ const styles = {
     height: '50%', 
   },
   icon: {
-    fontSize: '1.8rem',
+    fontSize: '1.5rem',
     cursor: 'pointer',
     color: 'black',
+    border: '1px solid lightblue',
+    borderRadius: '50%',
+    padding: '5px 5px'
   },
   input: {
     width: '70%',
