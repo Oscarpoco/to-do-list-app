@@ -28,7 +28,7 @@ const SearchInput = ({ searchTasks }) => {
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, []);
+  }, [searchRef, searchTasks]); // Adding searchRef and searchTasks as dependencies
 
   return (
     <div ref={searchRef} style={styles.container}>
