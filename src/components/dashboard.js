@@ -1,7 +1,6 @@
-// Dashboard.jsx
-import './dashboard.css';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import './dashboard.css';
 import { LuListTodo } from "react-icons/lu";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaRegCircleUser } from "react-icons/fa6";
@@ -11,6 +10,7 @@ import UserPopup from './UserPopup';
 import Loader from './Loader';
 import { BiEdit } from "react-icons/bi";
 import { AiFillDelete } from "react-icons/ai";
+import { FcApproval } from "react-icons/fc";
 
 function Dashboard({ setIsAuthenticated }) {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
@@ -28,7 +28,6 @@ function Dashboard({ setIsAuthenticated }) {
     password: ''
   });
 
-  // Assume we get the logged-in user's ID from local storage or another source
   const userId = localStorage.getItem('userId');
 
   useEffect(() => {
@@ -223,7 +222,7 @@ function Dashboard({ setIsAuthenticated }) {
                 </select>
               </div>
               <div className='task-button'>
-                <button type='submit'>Proceed</button>
+                <button type='submit'>Approve <FcApproval className='icon'/></button>
               </div>
             </form>
           )}

@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import './signInPopup.css'
+import './signInPopup.css';
 import CustomizedSnackbars from './toastNotification';
 import axios from 'axios';
 import AuthContext from './AuthContext';
@@ -38,6 +38,7 @@ function SignInPopup() {
         const user = users.find(user => user.username === username && user.password === password);
         if (user) {
           localStorage.setItem('authToken', user.username);
+          localStorage.setItem('userId', user.id); // Store userId in local storage
           localStorage.setItem('user', JSON.stringify(user));
           setSnackbar({ open: true, message: 'Sign in successful', severity: 'success' });
           setIsSignedIn(true);

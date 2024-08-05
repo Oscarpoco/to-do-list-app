@@ -71,14 +71,17 @@
 
 .bottom button
 {
-    width: 80%;
-    height: 80%;
-    background-color: red;
+    width: 70%;
+    height: 70%;
+    background-color: inherit;
     border: none;
-    font-size: 100%;
+    font-size: 80%;
     border-radius: 5px;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-    color: white;
+    border: 2px solid red;
+    border-top: none;
+    border-bottom: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    color: black;
     cursor: pointer;
     display: flex;
     align-items: center;
@@ -113,7 +116,6 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    /* background-color: blue; */
 }
 
 .searchNav #search
@@ -332,7 +334,7 @@ label
 {
     width: 70%;
     height: 90%;
-    border: 3px solid red;
+    border: 2px solid red;
     border-bottom: none;
     border-top: none;
     cursor: pointer;
@@ -340,17 +342,18 @@ label
     display: flex;
     justify-content: center;
     align-items: center;
+    gap: 0.2em;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     background-color: inherit;
     color: green;
-    font-size: 80%;
+    font-size: 70%;
     font-weight: bold;
 }
 
-.task-button button:hover
+.task-button .icon
 {
-    background-color: lightblue;
-    transition: all 0.7s ease-in-out;
+    font-size: 20px;
+    color: red;
 }
 
 .pending
