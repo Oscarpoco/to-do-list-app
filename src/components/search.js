@@ -10,25 +10,25 @@ const SearchInput = ({ searchTasks }) => {
     setIsSearchVisible(true);
   };
 
-  const handleClickOutside = (event) => {
-    if (searchRef.current && !searchRef.current.contains(event.target)) {
-      setIsSearchVisible(false);
-      setSearchTerm(""); // Clear search term when clicking outside
-      searchTasks(""); // Reset the task list
-    }
-  };
-
   const handleChange = (event) => {
     setSearchTerm(event.target.value);
     searchTasks(event.target.value);
   };
 
   useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setIsSearchVisible(false);
+        setSearchTerm(""); // Clear search term when clicking outside
+        searchTasks(""); // Reset the task list
+      }
+    };
+
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [searchRef, searchTasks, handleClickOutside]); // Adding searchRef and searchTasks as dependencies
+  }, [searchRef, searchTasks]); // Ensure searchTasks is stable or memoized in the parent
 
   return (
     <div ref={searchRef} style={styles.container}>
