@@ -67,10 +67,10 @@ function SignIn({ setIsAuthenticated }) {
             </div>
             <footer>
                 <div className='social-icons'>
-                    <FaFacebookF className='social'/>
-                    <FaLinkedinIn className='social'/>
-                    <IoLogoInstagram className='social'/>
-                    <BsTwitterX className='social'/>
+                    <FaFacebookF className='social-fa'/>
+                    <FaLinkedinIn className='social-fa'/>
+                    <IoLogoInstagram className='social-fa'/>
+                    <BsTwitterX className='social-fa'/>
                 </div>
                 <div className='developer'>&copy; 2024 Gamefusion</div>
             </footer>
