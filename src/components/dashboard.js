@@ -25,7 +25,9 @@ function Dashboard({ setIsAuthenticated }) {
   const [profile, setProfile] = useState({
     username: '',
     picture: '',
-    password: ''
+    password: '',
+    name: '',
+    phone: ''
   });
 
   const userId = localStorage.getItem('userId');
@@ -39,6 +41,15 @@ function Dashboard({ setIsAuthenticated }) {
   }, []);
 
   useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3030/users/${userId}`);
+        setProfile(response.data);
+      } catch (error) {
+        console.error("There was an error fetching the user data!", error);
+      }
+    };
+
     const fetchTasks = async () => {
       try {
         const response = await axios.get(`http://localhost:3030/tasks?userId=${userId}`);
@@ -48,6 +59,7 @@ function Dashboard({ setIsAuthenticated }) {
       }
     };
 
+    fetchUserData();
     fetchTasks();
   }, [userId]);
 

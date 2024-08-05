@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 import './UserPopup.css';
+import axios from 'axios';
 
 function UserPopup({ profile, onClose, onProfileChange }) {
   const [username, setUsername] = useState(profile.username);
   const [password, setPassword] = useState(profile.password);
   const [picture, setPicture] = useState(profile.picture);
-  const [name, setName] = useState(profile.name || ''); // Added field
-  const [phone, setPhone] = useState(profile.phone || ''); // Added field
+  const [name, setName] = useState(profile.name || '');
+  const [phone, setPhone] = useState(profile.phone || '');
 
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
@@ -35,11 +36,17 @@ function UserPopup({ profile, onClose, onProfileChange }) {
     setPhone(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const updatedProfile = { username, picture, password, name, phone };
-    onProfileChange(updatedProfile);
-    onClose();
+    const userId = localStorage.getItem('userId');
+    const updatedProfile = { id: userId, username, picture, password, name, phone };
+    try {
+      await axios.put(`http://localhost:3030/users/${userId}`, updatedProfile);
+      onProfileChange(updatedProfile);
+      onClose();
+    } catch (error) {
+      console.error("There was an error updating the profile!", error);
+    }
   };
 
   return (
@@ -52,11 +59,11 @@ function UserPopup({ profile, onClose, onProfileChange }) {
             <input type='text' value={username} onChange={handleUsernameChange} required />
           </div>
           <div className='form-field'>
-            <label>Name</label> {/* Added field */}
+            <label>Name</label>
             <input type='text' value={name} onChange={handleNameChange} />
           </div>
           <div className='form-field'>
-            <label>Phone</label> {/* Added field */}
+            <label>Phone</label>
             <input type='tel' value={phone} onChange={handlePhoneChange} />
           </div>
           <div className='form-field'>
