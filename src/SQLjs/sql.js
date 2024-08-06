@@ -1,5 +1,4 @@
-const initSqlJs = require('sql.js');
-
+import initSqlJs from 'sql.js';
 
 async function setupDatabase() {
   const SQL = await initSqlJs({
@@ -10,29 +9,29 @@ async function setupDatabase() {
   const db = new SQL.Database();
 
   // Creating tables
-//   Users and tasks
   db.run(`
     CREATE TABLE users (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       username TEXT UNIQUE,
       password TEXT,
-      email TEXT
+      phone INTEGER UNIQUE,
+      name TEXT
     );
     
-
     CREATE TABLE todos (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       user_id INTEGER,
       task TEXT,
-      done BOOLEAN,
+      priority TEXT,
+      date TEXT,
       FOREIGN KEY(user_id) REFERENCES users(id)
     );
   `); 
 
   // Function to sign up a new user
-  function signUp(username, password, email) {
+  function signUp(username, password) {
     try {
-      db.run("INSERT INTO users (username, password, email) VALUES (?, ?, ?)", [username, password, email]);
+      db.run("INSERT INTO users (username, password) VALUES (?, ?)", [username, password]);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -46,9 +45,9 @@ async function setupDatabase() {
   }
 
   // Function to add a task item
-  function addTodo(userId, task) {
+  function addTodo(userId, task, date, priority) {
     try {
-      db.run("INSERT INTO todos (user_id, task, done) VALUES (?, ?, ?)", [userId, task, false]);
+      db.run("INSERT INTO todos (user_id, task, date, priority) VALUES (?, ?, ?, ?)", [userId, task, date, priority]);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -62,9 +61,9 @@ async function setupDatabase() {
   }
 
   // Function to update a tasks item
-  function updateTodo(id, task, done) {
+  function updateTodo(id, task, date, priority) {
     try {
-      db.run("UPDATE todos SET task = ?, done = ? WHERE id = ?", [task, done, id]);
+      db.run("UPDATE todos SET task = ?, date = ?, priority = ? WHERE id = ?", [task, date, priority, id]);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -82,15 +81,16 @@ async function setupDatabase() {
   }
 
   // Function to update user profile
-  function updateProfile(userId, newEmail) {
+  function updateProfile(userId, phone, name) {
     try {
-      db.run("UPDATE users SET email = ? WHERE id = ?", [newEmail, userId]);
+      db.run("UPDATE users SET phone = ?, name = ? WHERE id = ?", [phone, name, userId]);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
     }
   }
-// I,m RETURNING THEM SO I CAN BE ABLE TO USE THEM ELSE WHERE
+
+  // Returning the functions so they can be used elsewhere
   return {
     signUp,
     signIn,
@@ -102,6 +102,9 @@ async function setupDatabase() {
   };
 }
 
+// Exporting setupDatabase as the default export
+export default setupDatabase;
+
 
 // testing my sql.js on development
 setupDatabase().then(dbMethods => {
@@ -109,10 +112,10 @@ setupDatabase().then(dbMethods => {
   const { signUp, signIn, addTodo, getTodos, updateTodo, deleteTodo, updateProfile } = dbMethods;
   
   // Sign up a user
-  console.log(signUp('oscar_kyle', 'password123', 'ok@gmail.com'));
+  console.log(signUp('ok@gmail.com', 'password123'));
 
   // Sign in a user
-  console.log(signIn('oscar_kyle', 'password123'));
+  console.log(signIn('ok@gmail.com', 'password123'));
 
   // Add a to-do
   console.log(addTodo(1, 'Finish project'));

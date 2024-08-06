@@ -1,45 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import initSqlJs from 'sql.js';
+import React, { useState, useContext } from 'react';
 import './signUpPopup.css';
 import CustomizedSnackbars from './toastNotification';
+import AuthContext from './AuthContext';
+import setupDatabase from '../SQLjs/sql';
 
 function SignUpPopup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: '', type: '' });
-  const [db, setDb] = useState(null);
-  const [memory, setMemory] = useState(null);
-
-  useEffect(() => {
-    const initializeDatabase = async () => {
-      const SQL = await initSqlJs({ 
-        // Use a custom WebAssembly memory instance
-        locateFile: (file) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/${file}`,
-        memory: memory ? new WebAssembly.Memory(memory) : undefined
-      });
-      
-      // Initialize a new database
-      const database = new SQL.Database();
-
-      // Create tables
-      database.run(`
-        CREATE TABLE IF NOT EXISTS users (
-          id INTEGER PRIMARY KEY AUTOINCREMENT,
-          username TEXT UNIQUE,
-          password TEXT
-        );
-      `);
-
-      setDb(database);
-    };
-
-    // Initialize the WebAssembly memory
-    const wasmMemory = new WebAssembly.Memory({ initial: 256, maximum: 256 });
-    setMemory(wasmMemory);
-
-    initializeDatabase();
-  }, []);
+  const { setIsSignedIn } = useContext(AuthContext);
 
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
@@ -82,7 +52,7 @@ function SignUpPopup() {
     return isProceed;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (isValidate()) {
@@ -91,19 +61,18 @@ function SignUpPopup() {
         return;
       }
 
-      if (db) {
-        // Insert user data into the database
-        try {
-          const stmt = db.prepare('INSERT INTO users (username, password) VALUES (?, ?)');
-          stmt.run([username, password]);
-          stmt.free();
-          
+      try {
+        const dbMethods = await setupDatabase();
+        const result = await dbMethods.signUp(username, password);
+
+        if (result.success) {
           setSnackbar({ open: true, message: 'Sign up successful', type: 'success' });
-        } catch (error) {
-          setSnackbar({ open: true, message: 'Sign up failed: ' + error.message, type: 'error' });
+          setIsSignedIn(true);
+        } else {
+          setSnackbar({ open: true, message: `Sign up failed: ${result.error}`, type: 'error' });
         }
-      } else {
-        setSnackbar({ open: true, message: 'Database is not initialized', type: 'error' });
+      } catch (error) {
+        setSnackbar({ open: true, message: `Sign up failed: ${error.message}`, type: 'error' });
       }
     }
   };

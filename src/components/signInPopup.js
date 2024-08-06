@@ -1,13 +1,13 @@
 import React, { useState, useContext } from 'react';
 import './signInPopup.css';
 import CustomizedSnackbars from './toastNotification';
-import axios from 'axios';
 import AuthContext from './AuthContext';
+import setupDatabase from '../SQLjs/sql';
 
 function SignInPopup() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: '' });
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', type: '' });
   const { setIsSignedIn } = useContext(AuthContext);
 
   const handleCloseSnackbar = () => {
@@ -15,38 +15,38 @@ function SignInPopup() {
   };
 
   const validate = () => {
-    if (username === '' || username === null) {
-      setSnackbar({ open: true, message: 'Please enter the username', severity: 'warning' });
+    if (!username.trim()) {
+      setSnackbar({ open: true, message: 'Please enter the username', type: 'warning' });
       return false;
     }
 
-    if (password === '' || password === null) {
-      setSnackbar({ open: true, message: 'Please enter the password', severity: 'warning' });
+    if (!password.trim()) {
+      setSnackbar({ open: true, message: 'Please enter the password', type: 'warning' });
       return false;
     }
 
     return true;
   };
 
-  const proceedLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (validate()) {
       try {
-        const response = await axios.get('http://localhost:3001/users');
-        const users = response.data;
+        const dbMethods = await setupDatabase();
+        const result = await dbMethods.signIn(username, password);
 
-        const user = users.find(user => user.username === username && user.password === password);
-        if (user) {
-          localStorage.setItem('authToken', user.username);
-          localStorage.setItem('userId', user.id); // Store userId in local storage
-          localStorage.setItem('user', JSON.stringify(user));
-          setSnackbar({ open: true, message: 'Sign in successful', severity: 'success' });
+        if (result.success) {
+          localStorage.setItem('authToken', result.user.username);
+          localStorage.setItem('userId', result.user.id); // Store userId in local storage
+          localStorage.setItem('user', JSON.stringify(result.user));
+          setSnackbar({ open: true, message: 'Sign in successful', type: 'success' });
           setIsSignedIn(true);
         } else {
-          setSnackbar({ open: true, message: 'Invalid username or password', severity: 'error' });
+          setSnackbar({ open: true, message: `Invalid username or password`, type: 'error' });
         }
-      } catch (err) {
-        setSnackbar({ open: true, message: 'Error: ' + err.message, severity: 'error' });
+      } catch (error) {
+        setSnackbar({ open: true, message: `Sign in failed: ${error.message}`, type: 'error' });
       }
     }
   };
@@ -54,9 +54,9 @@ function SignInPopup() {
   return (
     <div className='signInPopup'>
       <div className='title'>Sign In</div>
-      <form onSubmit={proceedLogin}>
+      <form onSubmit={handleSubmit}>
         <input
-          type='text'
+          type='email'
           value={username}
           onChange={e => setUsername(e.target.value)}
           placeholder='Email'
@@ -72,7 +72,7 @@ function SignInPopup() {
       <CustomizedSnackbars
         open={snackbar.open}
         message={snackbar.message}
-        severity={snackbar.severity}
+        severity={snackbar.type}
         onClose={handleCloseSnackbar}
       />
     </div>
