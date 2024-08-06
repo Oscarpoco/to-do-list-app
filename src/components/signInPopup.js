@@ -32,7 +32,7 @@ function SignInPopup() {
     e.preventDefault();
     if (validate()) {
       try {
-        const response = await axios.get('http://localhost:3030/users');
+        const response = await axios.get('http://localhost:3001/users');
         const users = response.data;
 
         const user = users.find(user => user.username === username && user.password === password);

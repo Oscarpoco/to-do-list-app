@@ -44,7 +44,7 @@ function Dashboard({ setIsAuthenticated }) {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const response = await axios.get(`http://localhost:3030/users/${userId}`);
+        const response = await axios.get(`http://localhost:3001/users/${userId}`);
         setProfile(response.data);
       } catch (error) {
         console.error("There was an error fetching the user data!", error);
@@ -53,7 +53,7 @@ function Dashboard({ setIsAuthenticated }) {
 
     const fetchTasks = async () => {
       try {
-        const response = await axios.get(`http://localhost:3030/tasks?userId=${userId}`);
+        const response = await axios.get(`http://localhost:3001/tasks?userId=${userId}`);
         setTasks(response.data);
         setFilteredTasks(response.data);
       } catch (error) {
@@ -102,7 +102,7 @@ function Dashboard({ setIsAuthenticated }) {
 
       if (isEditing) {
         try {
-          const response = await axios.put(`http://localhost:3030/tasks/${tasks[editIndex].id}`, newTask);
+          const response = await axios.put(`http://localhost:3001/tasks/${tasks[editIndex].id}`, newTask);
           const updatedTasks = tasks.map((t, index) =>
             index === editIndex ? response.data : t
           );
@@ -115,7 +115,7 @@ function Dashboard({ setIsAuthenticated }) {
         }
       } else {
         try {
-          const response = await axios.post('http://localhost:3030/tasks', newTask);
+          const response = await axios.post('http://localhost:3001/tasks', newTask);
           const newTasks = [...tasks, response.data];
           setTasks(newTasks);
           setFilteredTasks(newTasks);
@@ -143,7 +143,7 @@ function Dashboard({ setIsAuthenticated }) {
 
   const handleDelete = async (index) => {
     try {
-      await axios.delete(`http://localhost:3030/tasks/${filteredTasks[index].id}`);
+      await axios.delete(`http://localhost:3001/tasks/${filteredTasks[index].id}`);
       const updatedTasks = filteredTasks.filter((_, i) => i !== index);
       setTasks(updatedTasks);
       setFilteredTasks(updatedTasks);

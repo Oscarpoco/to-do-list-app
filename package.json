@@ -40,7 +40,7 @@
     "test": "react-app-rewired test",
     "eject": "react-scripts eject",
     "client": "react-scripts start",
-    "start": "concurrently \"npm run client\" \"node server.js\""
+    "start": "concurrently \"npm run client\" \"node database.js\""
   },
   "eslintConfig": {
     "extends": [

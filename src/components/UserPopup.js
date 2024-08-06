@@ -41,7 +41,7 @@ function UserPopup({ profile, onClose, onProfileChange }) {
     const userId = localStorage.getItem('userId');
     const updatedProfile = { id: userId, username, picture, password, name, phone };
     try {
-      await axios.put(`http://localhost:3030/users/${userId}`, updatedProfile);
+      await axios.put(`http://localhost:3001/users/${userId}`, updatedProfile);
       onProfileChange(updatedProfile);
       onClose();
     } catch (error) {
