@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import {getDb} from '../'
 import './signUpPopup.css';
 import CustomizedSnackbars from './toastNotification';
 
