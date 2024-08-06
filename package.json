@@ -16,12 +16,8 @@
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.7.2",
-    "better-sqlite3": "^11.1.2",
-    "dayjs": "^1.11.12",
     "my-website": "file:",
-    "path-browserify": "^1.0.1",
     "react": "^18.3.1",
-    "react-app-rewired": "^2.2.1",
     "react-calendar": "^5.0.0",
     "react-dom": "^18.3.1",
     "react-icons": "^5.2.1",
@@ -36,11 +32,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
+    "start": "react-app-rewired start",
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
-    "eject": "react-scripts eject",
-    "client": "react-scripts start",
-    "start": "concurrently \"npm run client\" \"node database.js\""
+    "eject": "react-scripts eject"
   },
   "eslintConfig": {
     "extends": [
@@ -62,8 +57,8 @@
   },
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
-    "concurrently": "^8.2.2",
-    "json-server": "^1.0.0-beta.1"
+    "json-server": "^1.0.0-beta.1",
+    "react-app-rewired": "^2.2.1"
   },
   "description": "![sketch](https://github.com/user-attachments/assets/4476204a-1cbf-4d22-86ab-8e5f65dbda44)",
   "main": "config-overrides.js",

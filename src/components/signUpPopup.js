@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import {getDb} from '../'
+import React, { useState, useEffect } from 'react';
+import initSqlJs from 'sql.js';
 import './signUpPopup.css';
 import CustomizedSnackbars from './toastNotification';
 
@@ -8,6 +8,38 @@ function SignUpPopup() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: '', type: '' });
+  const [db, setDb] = useState(null);
+  const [memory, setMemory] = useState(null);
+
+  useEffect(() => {
+    const initializeDatabase = async () => {
+      const SQL = await initSqlJs({ 
+        // Use a custom WebAssembly memory instance
+        locateFile: (file) => `https://cdnjs.cloudflare.com/ajax/libs/sql.js/1.5.0/${file}`,
+        memory: memory ? new WebAssembly.Memory(memory) : undefined
+      });
+      
+      // Initialize a new database
+      const database = new SQL.Database();
+
+      // Create tables
+      database.run(`
+        CREATE TABLE IF NOT EXISTS users (
+          id INTEGER PRIMARY KEY AUTOINCREMENT,
+          username TEXT UNIQUE,
+          password TEXT
+        );
+      `);
+
+      setDb(database);
+    };
+
+    // Initialize the WebAssembly memory
+    const wasmMemory = new WebAssembly.Memory({ initial: 256, maximum: 256 });
+    setMemory(wasmMemory);
+
+    initializeDatabase();
+  }, []);
 
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
@@ -59,23 +91,20 @@ function SignUpPopup() {
         return;
       }
 
-      let userDetails = { username, password };
-      console.log(userDetails);
-
-      fetch("http://localhost:3001/users", {
-        method: "POST",
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(userDetails)
-      }).then((res) => {
-        if (res.ok) {
+      if (db) {
+        // Insert user data into the database
+        try {
+          const stmt = db.prepare('INSERT INTO users (username, password) VALUES (?, ?)');
+          stmt.run([username, password]);
+          stmt.free();
+          
           setSnackbar({ open: true, message: 'Sign up successful', type: 'success' });
-
-        } else {
-          setSnackbar({ open: true, message: 'Sign up failed', type: 'error' });
+        } catch (error) {
+          setSnackbar({ open: true, message: 'Sign up failed: ' + error.message, type: 'error' });
         }
-      }).catch((err) => {
-        setSnackbar({ open: true, message: 'Fail: ' + err.message, type: 'error' });
-      });
+      } else {
+        setSnackbar({ open: true, message: 'Database is not initialized', type: 'error' });
+      }
     }
   };
 
@@ -101,7 +130,7 @@ function SignUpPopup() {
           onChange={e => setConfirmPassword(e.target.value)}
           placeholder='Confirm Password'
         />
-        <button type='submit'>submit</button>
+        <button type='submit'>Submit</button>
       </form>
       <CustomizedSnackbars
         open={snackbar.open}
