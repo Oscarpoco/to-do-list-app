@@ -5,7 +5,7 @@ async function setupDatabase() {
     locateFile: file => `https://sql.js.org/dist/${file}`
   });
 
-  // Creating a database
+  // Creating a new in-memory database
   const db = new SQL.Database();
 
   // Creating tables
@@ -81,9 +81,9 @@ async function setupDatabase() {
   }
 
   // Function to update user profile
-  function updateProfile(userId, phone, name) {
+  function updateProfile(userId, phone, name, username, password) {
     try {
-      db.run("UPDATE users SET phone = ?, name = ? WHERE id = ?", [phone, name, userId]);
+      db.run("UPDATE users SET phone = ?, name = ?, username = ?, password = ? WHERE id = ?", [phone, name, username, password, userId]);
       return { success: true };
     } catch (error) {
       return { success: false, error: error.message };
@@ -118,17 +118,17 @@ setupDatabase().then(dbMethods => {
   console.log(signIn('ok@gmail.com', 'password123'));
 
   // Add a to-do
-  console.log(addTodo(1, 'Finish project'));
+  console.log(addTodo(1, 'Finish project', '2023-12-31', 'high'));
 
   // Get all to-dos
   console.log(getTodos(1));
 
   // Update a to-do
-  console.log(updateTodo(1, 'Finish project by tonight', true));
+  console.log(updateTodo(1, 'Finish project by tonight', '2023-12-31', 'high'));
 
   // Delete a to-do
   console.log(deleteTodo(1));
 
   // Update user profile
-  console.log(updateProfile(1, 'okpoco@gmail.com'));
+  console.log(updateProfile(1, '1234567890', 'John Doe', 'newusername', 'newpassword'));
 });
