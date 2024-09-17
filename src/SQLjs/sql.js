@@ -187,6 +187,36 @@ function addTodo(userId, task, date, priority) {
       }
     }
 
+    // UPDATE PROFILE
+    // Fetch profile data
+    async function fetchProfile(userId) {
+      try {
+        const stmt = db.prepare("SELECT username, picture, name, phone FROM users WHERE id = ?");
+        stmt.bind([userId]);
+
+        const profile = stmt.getAsObject();
+        stmt.free();
+
+        return profile;
+      } catch (error) {
+        console.error("Failed to fetch profile:", error);
+        return {};
+      }
+    }
+
+    // Update profile data
+    async function updateProfile(userId, { username, picture, name, phone }) {
+      try {
+        const stmt = db.prepare("UPDATE users SET username = ?, picture = ?, name = ?, phone = ? WHERE id = ?");
+        stmt.run([username, picture, name, phone, userId]);
+        stmt.free();
+        saveDb();
+        return { success: true };
+      } catch (error) {
+        console.error("Failed to update profile:", error);
+        return { success: false, error: error.message };
+      }
+    }
     console.log("Database setup completed successfully");
     return {
       signUp,
@@ -194,7 +224,9 @@ function addTodo(userId, task, date, priority) {
       getTodos,
       addTodo,
       updateTodo,
-      deleteTodo
+      deleteTodo,
+      fetchProfile,
+      updateProfile
     };
   } catch (error) {
     console.error("Failed to initialize SQL.js:", error);

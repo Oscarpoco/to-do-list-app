@@ -8,7 +8,8 @@
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.9);
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 1);
     display: flex;
     justify-content: center;
     align-items: center;
@@ -16,11 +17,29 @@
   
   .user-popup-content 
   {
-    background: rgba(255, 255, 255, 0.6);
-    padding: 20px;
-    border-radius: 5px;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 1em;
+    border-radius: 20px;
     position: relative;
+    border: 2px solid rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    height: 90vh;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    overflow: auto;
   }
+
+  /* Hide scrollbar for WebKit browsers */
+  .user-popup-content::-webkit-scrollbar {
+  display: none;
+}
+
+.user-popup-content {
+  overflow: auto; 
+}
+
   
   .close-button 
   {
@@ -49,6 +68,11 @@
   .form-field 
   {
     margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: .5em;
   }
   
   .form-field label 
@@ -56,9 +80,10 @@
     display: block;
     text-align: left;
     margin-bottom: 5px;
-    padding-left: 5px;
+    padding-left: 0;
     color: black;
     background: inherit;
+    width: 100%;
   }
   
   .form-field input[type="text"],
@@ -98,21 +123,21 @@
 
   form button
   {
-    background-color: inherit;
+    background-color: #1877F2;
     border-radius: 3px;
     box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
     border: none;
     font-size: .8rem;
     cursor: pointer;
     padding: 7px 15px;
-    color: #fff;
+    color: whitesmoke;
   }
 
   form button:hover
   {
     background-color: #fff;
     transition: all .7s ease-out;
-    color: black;
+    color: green;
   }
   
   
@@ -121,8 +146,8 @@
 {
     .popup-content 
     {
-        height: 60vh;
-        width: 25vh;
+        height: 70vh;
+        width: 50%;
     }
 
     .popup-overlay 

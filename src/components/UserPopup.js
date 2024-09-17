@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import './UserPopup.css';
-import axios from 'axios';
 
 function UserPopup({ profile, onClose, onProfileChange }) {
   const [username, setUsername] = useState(profile.username);
@@ -40,23 +39,18 @@ function UserPopup({ profile, onClose, onProfileChange }) {
     e.preventDefault();
     const userId = localStorage.getItem('userId');
     const updatedProfile = { id: userId, username, picture, password, name, phone };
-    try {
-      await axios.put(`http://localhost:3001/users/${userId}`, updatedProfile);
-      onProfileChange(updatedProfile);
-      onClose();
-    } catch (error) {
-      console.error("There was an error updating the profile!", error);
-    }
+   
   };
 
   return (
     <div className='user-popup'>
       <div className='user-popup-content'>
+        <h2>Update Profile</h2>
         <button className='close-button' onClick={onClose}>+</button>
         <form onSubmit={handleSubmit}>
           <div className='form-field'>
             <label>Username</label>
-            <input type='text' value={username} onChange={handleUsernameChange} required />
+            <input type='text' readOnly value={username} onChange={handleUsernameChange} required />
           </div>
           <div className='form-field'>
             <label>Name</label>
@@ -72,7 +66,13 @@ function UserPopup({ profile, onClose, onProfileChange }) {
             {picture && <img src={picture} alt='Profile' className='preview' />}
           </div>
           <div className='form-field'>
-            <label>Password</label>
+            <label>Old Password</label>
+            <input type='password' value={password} onChange={handlePasswordChange} required />
+
+            <label>New Password</label>
+            <input type='password' value={password} onChange={handlePasswordChange} required />
+
+            <label>Confirm password</label>
             <input type='password' value={password} onChange={handlePasswordChange} required />
           </div>
           <button type='submit'>Save</button>
