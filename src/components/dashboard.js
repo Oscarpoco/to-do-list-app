@@ -1,18 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+
+// DATABASE
+import setupDatabase from '../SQLjs/sql';
+
+// COMPONENTS
 import './dashboard.css';
+import SearchInput from './search';
+import UserPopup from './UserPopup';
+import Loader from './Loader';
+import CustomizedSnackbars from './toastNotification';
+
+// ICONS
+import { BiEdit } from "react-icons/bi";
+import { AiFillDelete } from "react-icons/ai";
+import { FcApproval } from "react-icons/fc";
 import { LuListTodo } from "react-icons/lu";
 import { RiLogoutBoxLine } from "react-icons/ri";
 import { FaRegCircleUser } from "react-icons/fa6";
 import { MdOutlinePendingActions } from "react-icons/md";
-import SearchInput from './search';
-import UserPopup from './UserPopup';
-import Loader from './Loader';
-import { BiEdit } from "react-icons/bi";
-import { AiFillDelete } from "react-icons/ai";
-import { FcApproval } from "react-icons/fc";
 
-function Dashboard({ setIsAuthenticated }) {
+
+function Dashboard({ setIsSignedIn }) {
   const [isPopupVisible, setIsPopupVisible] = useState(false);
   const [isFormVisible, setIsFormVisible] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,6 +31,7 @@ function Dashboard({ setIsAuthenticated }) {
   const [priority, setPriority] = useState("none");
   const [isEditing, setIsEditing] = useState(false);
   const [editIndex, setEditIndex] = useState(null);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', type: '' });
   const [profile, setProfile] = useState({
     username: '',
     picture: '',
@@ -31,57 +40,76 @@ function Dashboard({ setIsAuthenticated }) {
     phone: ''
   });
 
+  
   const userId = localStorage.getItem('userId');
+  const [db, setDb] = useState(null);
 
   useEffect(() => {
-    const timer = setTimeout(() => {
+    setTimeout(() => {
       setIsLoading(false);
     }, 2000);
-
-    return () => clearTimeout(timer);
   }, []);
 
+  // Initialize the database
   useEffect(() => {
-    const fetchUserData = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/users/${userId}`);
-        setProfile(response.data);
-      } catch (error) {
-        console.error("There was an error fetching the user data!", error);
-      }
-    };
+    async function initializeDatabase() {
+      const database = await setupDatabase();
+      setDb(database);
+    }
+    initializeDatabase();
+  }, []);
 
-    const fetchTasks = async () => {
-      try {
-        const response = await axios.get(`http://localhost:3001/tasks?userId=${userId}`);
-        setTasks(response.data);
-        setFilteredTasks(response.data);
-      } catch (error) {
-        console.error("There was an error fetching the tasks!", error);
-      }
-    };
+  // Fetch tasks once the database is ready and the userId is available
+  useEffect(() => {
+    if (db && userId) {
+      fetchTasks();
+    }
+  }, [db, userId]);
 
-    fetchUserData();
-    fetchTasks();
-  }, [userId]);
+  const fetchTasks = async () => {
+    if (db && userId) {
+      try {
+       
+        const userTasks = db.getTodos(userId);
+
+        setTasks(userTasks || []); 
+        setFilteredTasks(userTasks || []);  
+
+      } catch (error) {
+        setSnackbar({ open: true, message: 'Error Fetching Tasks', type: 'error' });  
+      }
+    } else {
+      setSnackbar({ open: true, message: 'Database or userId not available yet.', type: 'error' });
+    }
+  };
 
   const togglePopup = () => {
     setIsPopupVisible(!isPopupVisible);
   };
 
+  // LOGOUT
   const handleLogout = () => {
     setIsLoading(true);
 
     setTimeout(() => {
-      setIsAuthenticated(false);
+      setIsSignedIn(false);
       setIsLoading(false);
     }, 2000);
   };
 
   const toggleFormVisibility = () => {
     setIsFormVisible(!isFormVisible);
+    if (isFormVisible) {
+      // Clear form fields on closing the form
+      setTask("");
+      setDate("");
+      setPriority("none");
+      setIsEditing(false);
+      setEditIndex(null);
+    }
   };
 
+  // Handle input changes
   const handleTaskChange = (e) => {
     setTask(e.target.value);
   };
@@ -91,46 +119,30 @@ function Dashboard({ setIsAuthenticated }) {
   };
 
   const handlePriorityChange = (e) => {
-    setPriority(e.target.value);
+    setPriority(e.target.value); 
   };
 
-  const handleFormSubmit = async (e) => {
+  // Handle form submission
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (task && date && priority !== "none") {
-      const newTask = { task, date, priority, userId };
-
+    if (db) {
       if (isEditing) {
-        try {
-          const response = await axios.put(`http://localhost:3001/tasks/${tasks[editIndex].id}`, newTask);
-          const updatedTasks = tasks.map((t, index) =>
-            index === editIndex ? response.data : t
-          );
-          setTasks(updatedTasks);
-          setFilteredTasks(updatedTasks);
-          setIsEditing(false);
-          setEditIndex(null);
-        } catch (error) {
-          console.error("There was an error updating the task!", error);
-        }
-      } else {
-        try {
-          const response = await axios.post('http://localhost:3001/tasks', newTask);
-          const newTasks = [...tasks, response.data];
-          setTasks(newTasks);
-          setFilteredTasks(newTasks);
-        } catch (error) {
-          console.error("There was an error adding the task!", error);
-        }
-      }
 
-      setTask("");
-      setDate("");
-      setPriority("none");
-      setIsFormVisible(false);
+        // Update task
+        const taskToUpdate = filteredTasks[editIndex];
+        db.updateTodo(taskToUpdate.id, task, new Date(date).toISOString(), priority);
+        setSnackbar({ open: true, message: 'Successfully added.', type: 'success' });
+      } else {
+        // Add new task
+        db.addTodo(userId, task, new Date(date).toISOString(), priority); 
+        setSnackbar({ open: true, message: 'Successfully added.', type: 'success' });
+      }
+      fetchTasks();
+      toggleFormVisibility();
     }
   };
 
+  // Handle task editing
   const handleEdit = (index) => {
     const taskToEdit = filteredTasks[index];
     setTask(taskToEdit.task);
@@ -141,34 +153,35 @@ function Dashboard({ setIsAuthenticated }) {
     setEditIndex(index);
   };
 
-  const handleDelete = async (index) => {
-    try {
-      await axios.delete(`http://localhost:3001/tasks/${filteredTasks[index].id}`);
-      const updatedTasks = filteredTasks.filter((_, i) => i !== index);
-      setTasks(updatedTasks);
-      setFilteredTasks(updatedTasks);
-    } catch (error) {
-      console.error("There was an error deleting the task!", error);
+  // Handle task deletion
+  const handleDelete = (id) => {
+    if (db) {
+      db.deleteTodo(id);
+      fetchTasks();
+      setSnackbar({ open: true, message: 'Successfullu deleted.', type: 'success' });
     }
   };
 
+  // Update profile data
   const handleProfileChange = (updatedProfile) => {
     setProfile(updatedProfile);
   };
 
+  // Get priority color for display
   const getPriorityColor = (priority) => {
     switch (priority) {
       case "High":
-        return "rgba(255, 0, 0, 0.227)";
+        return "rgba(254, 1, 1, 0.23)";
       case "Medium":
-        return "rgba(255, 255, 0, 0.252)";
+        return "rgba(255, 255, 0, 0.221)";
       case "Low":
-        return "rgba(0, 128, 0, 0.277)";
+        return "rgba(0, 128, 0, 0.205)";
       default:
         return "white";
     }
   };
 
+  // Search for tasks based on the search term
   const searchTasks = (searchTerm) => {
     if (searchTerm === "") {
       setFilteredTasks(tasks);
@@ -180,9 +193,20 @@ function Dashboard({ setIsAuthenticated }) {
     }
   };
 
+  // HANDLE CLOSE THE SNACKBAR
+  const handleCloseSnackbar = () => {
+    setSnackbar({ ...snackbar, open: false });
+  };
+
+  // LOADING
   if (isLoading) {
-    return <Loader name="Processing" />;
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <Loader />
+      </div>
+    );
   }
+  // ENDS
 
   return (
     <div className='dashboard'>
@@ -216,7 +240,7 @@ function Dashboard({ setIsAuthenticated }) {
         </div>
         <div className='to-do-main'>
           {isFormVisible && (
-            <form className='main-form' onSubmit={handleFormSubmit}>
+            <form className='main-form' onSubmit={handleSubmit}>
               <div className='task-descriptions'>
                 <input 
                   type='text' 
@@ -254,6 +278,9 @@ function Dashboard({ setIsAuthenticated }) {
                 <button type='submit'>Approve <FcApproval className='icon'/></button>
               </div>
             </form>
+            
+            // SNACKBAR
+
           )}
           <div className='pending'>
             <div className='title'>
@@ -273,7 +300,7 @@ function Dashboard({ setIsAuthenticated }) {
                   </div>
                   <div className='task-actions'>
                     <button onClick={() => handleEdit(index)}><BiEdit className='edit-icon'/></button>
-                    <button onClick={() => handleDelete(index)}><AiFillDelete className='delete-icon'/></button>
+                    <button onClick={() => handleDelete(task.id)}><AiFillDelete className='delete-icon'/></button>
                   </div>
                 </div>
               ))}
@@ -281,7 +308,15 @@ function Dashboard({ setIsAuthenticated }) {
           </div>
         </div>
       </div>
+
+      {/* POPUPS */}
       {isPopupVisible && <UserPopup profile={profile} onClose={togglePopup} onProfileChange={handleProfileChange} />}
+      <CustomizedSnackbars 
+        open={snackbar.open}
+        message={snackbar.message}
+        severity={snackbar.type}
+        onClose={handleCloseSnackbar}
+      />
     </div>
   );
 }

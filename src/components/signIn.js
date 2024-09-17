@@ -12,7 +12,7 @@ import { IoLogoInstagram } from "react-icons/io5";
 import { BsTwitterX } from "react-icons/bs";
 import Loader from './Loader';
 
-function SignIn({ setIsAuthenticated }) {
+function SignIn({setIsSignedIn }) {
     const [isSignIn, setIsSignIn] = useState(true);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -28,11 +28,10 @@ function SignIn({ setIsAuthenticated }) {
     const handleSignIn = async () => {
         setIsLoading(true);
         
-        // Simulate authentication process
         setTimeout(() => {
-            setIsAuthenticated(true);
+            setIsSignedIn(true);
             setIsLoading(false);
-        }, 2000);
+        }, 3000);
     };
 
     if (isLoading) {
@@ -61,7 +60,7 @@ function SignIn({ setIsAuthenticated }) {
                     </div>
 
                     <div className='signIn-form'>
-                        {isSignIn ? <SignInPopup setIsAuthenticated={handleSignIn} /> : <SignUpPopup />}
+                        {isSignIn ? <SignInPopup setIsAuthenticated={handleSignIn} /> : <SignUpPopup setIsAuthenticated={handleSignIn}/>}
                     </div>
                 </div>
             </div>

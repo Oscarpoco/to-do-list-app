@@ -1,134 +1,205 @@
 import initSqlJs from 'sql.js';
 
 async function setupDatabase() {
-  const SQL = await initSqlJs({
-    locateFile: file => `https://sql.js.org/dist/${file}`
-  });
+  try {
+    // INITIALIZING DATABASE
+    const SQL = await initSqlJs({
+      locateFile: file => `https://sql.js.org/dist/${file}`
+    });
 
-  // Creating a new in-memory database
-  const db = new SQL.Database();
-
-  // Creating tables
-  db.run(`
-    CREATE TABLE users (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      username TEXT UNIQUE,
-      password TEXT,
-      phone INTEGER UNIQUE,
-      name TEXT
-    );
+    // PERSISTING WITH LOCAL STORAGE
+    let db;
     
-    CREATE TABLE todos (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      user_id INTEGER,
-      task TEXT,
-      priority TEXT,
-      date TEXT,
-      FOREIGN KEY(user_id) REFERENCES users(id)
-    );
-  `); 
-
-  // Function to sign up a new user
-  function signUp(username, password) {
-    try {
-      db.run("INSERT INTO users (username, password) VALUES (?, ?)", [username, password]);
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
+    const savedDb = localStorage.getItem('sqliteDb');
+    if (savedDb) {
+      db = new SQL.Database(new Uint8Array(JSON.parse(savedDb)));
+      
+    } else {
+      db = new SQL.Database();
+    
     }
-  }
 
-  // Function to sign in a user
-  function signIn(username, password) {
-    const result = db.exec("SELECT * FROM users WHERE username = ? AND password = ?", [username, password]);
-    return result[0] ? { success: true, user: result[0].values[0] } : { success: false };
-  }
+    // CREATING TABLES 
+    db.run(`
+      CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        username TEXT UNIQUE,
+        password TEXT,
+        phone INTEGER UNIQUE,
+        name TEXT
+      );
+      
+      CREATE TABLE IF NOT EXISTS todos (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER,
+        task TEXT,
+        priority TEXT,
+        date TEXT,
+        FOREIGN KEY(user_id) REFERENCES users(id)
+      );
+    `);
+    
 
-  // Function to add a task item
-  function addTodo(userId, task, date, priority) {
-    try {
-      db.run("INSERT INTO todos (user_id, task, date, priority) VALUES (?, ?, ?, ?)", [userId, task, date, priority]);
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
+    // SAVE DB TO LOCALSTORAGE
+    function saveDb() {
+      const data = db.export();
+      const arr = new Uint8Array(data);
+      localStorage.setItem('sqliteDb', JSON.stringify(Array.from(arr)));
     }
-  }
 
-  // Function to get all tasks for a user
-  function getTodos(userId) {
-    const result = db.exec("SELECT * FROM todos WHERE user_id = ?", [userId]);
-    return result[0] ? result[0].values : [];
-  }
 
-  // Function to update a tasks item
-  function updateTodo(id, task, date, priority) {
-    try {
-      db.run("UPDATE todos SET task = ?, date = ?, priority = ? WHERE id = ?", [task, date, priority, id]);
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
+    // SIGN UP FUNCTION
+    function signUp(username, password) {
+      try {
+
+        console.log("Attempting to sign up user:", username);
+
+        const checkStmt = db.prepare("SELECT id FROM users WHERE username = ?");
+        const existingUser = checkStmt.getAsObject([username]);
+        checkStmt.free();
+
+        if (existingUser.id) {
+
+          console.log("User already exists:", username);
+
+          return { success: false, error: 'User already exists' };
+        }
+
+        const stmt = db.prepare("INSERT INTO users (username, password) VALUES (?, ?)");
+        stmt.run([username, password]);
+        stmt.free();
+        
+        const userId = db.exec("SELECT last_insert_rowid() as id")[0].values[0][0];
+
+        console.log("User signed up successfully with ID:", userId);
+        
+        saveDb();
+        return { success: true, userId: userId.toString() };
+      } catch (error) {
+        console.error("Sign up failed:", error);
+        return { success: false, error: error.message };
+      }
     }
-  }
 
-  // Function to delete a tasks item
-  function deleteTodo(id) {
-    try {
-      db.run("DELETE FROM todos WHERE id = ?", [id]);
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
+
+    // SIGN IN FUNCTION
+    function signIn(username, password) {
+      try {
+        console.log("Attempting to sign in user:", username);
+        const stmt = db.prepare("SELECT id, username FROM users WHERE username = ? AND password = ?");
+        const result = stmt.getAsObject([username, password]);
+        stmt.free();
+
+        if (result.id) {
+
+          console.log("User signed in successfully:", result.username);
+
+          return { 
+            success: true, 
+            user: { 
+              userId: result.id.toString(), 
+              username: result.username
+            } 
+          };
+        } else {
+          console.log("Sign in failed: Invalid credentials");
+          return { success: false, error: 'Invalid username or password' };
+        }
+      } catch (error) {
+        console.error("Sign in failed:", error);
+        return { success: false, error: error.message };
+      }
     }
-  }
 
-  // Function to update user profile
-  function updateProfile(userId, phone, name, username, password) {
-    try {
-      db.run("UPDATE users SET phone = ?, name = ?, username = ?, password = ? WHERE id = ?", [phone, name, username, password, userId]);
-      return { success: true };
-    } catch (error) {
-      return { success: false, error: error.message };
+    // TO DO CRUD OPERATIONS
+
+    // Fetch todos for a user
+    function getTodos(userId) {
+      try {
+        const stmt = db.prepare("SELECT * FROM todos WHERE user_id = ?");
+        stmt.bind([userId]); // Bind the userId to the prepared statement
+        
+        const todos = [];
+        while (stmt.step()) {
+          const todo = stmt.getAsObject();
+          console.log("Fetched todo:", todo); // Debugging log for each fetched todo
+          todos.push(todo);
+        }
+        stmt.free();
+        
+        console.log("All fetched todos for user:", todos); // Debugging log for all todos
+        return todos;
+      } catch (error) {
+        console.error("Failed to fetch todos:", error);
+        return [];
+      }
     }
-  }
+    
 
-  // Returning the functions so they can be used elsewhere
-  return {
-    signUp,
-    signIn,
-    addTodo,
-    getTodos,
-    updateTodo,
-    deleteTodo,
-    updateProfile
-  };
+   // Add a new todo
+function addTodo(userId, task, date, priority) {
+  try {
+    // Ensure date is in a string format (e.g., ISO format)
+    const formattedDate = new Date(date).toISOString();
+
+    const stmt = db.prepare("INSERT INTO todos (user_id, task, date, priority) VALUES (?, ?, ?, ?)");
+    stmt.run([userId, task, formattedDate, priority]);
+    stmt.free();
+    saveDb();
+        console.log('Task', task)
+        console.log('id', userId)
+        console.log('date', date)
+        console.log('Priority', priority)
+    return { success: true };
+    
+  } catch (error) {
+    console.error("Failed to add todo:", error);
+    return { success: false, error: error.message };
+  }
 }
 
-// Exporting setupDatabase as the default export
+
+    // Update a todo
+    function updateTodo(id, task, date, priority) {
+      try {
+        const stmt = db.prepare("UPDATE todos SET task = ?, date = ?, priority = ? WHERE id = ?");
+        stmt.run([task, date, priority, id]);
+        stmt.free();
+        saveDb();
+        return { success: true };
+      } catch (error) {
+        console.error("Failed to update todo:", error);
+        return { success: false, error: error.message };
+      }
+    }
+
+    // Delete a todo
+    function deleteTodo(id) {
+      try {
+        const stmt = db.prepare("DELETE FROM todos WHERE id = ?");
+        stmt.run([id]);
+        stmt.free();
+        saveDb();
+        return { success: true };
+      } catch (error) {
+        console.error("Failed to delete todo:", error);
+        return { success: false, error: error.message };
+      }
+    }
+
+    console.log("Database setup completed successfully");
+    return {
+      signUp,
+      signIn,
+      getTodos,
+      addTodo,
+      updateTodo,
+      deleteTodo
+    };
+  } catch (error) {
+    console.error("Failed to initialize SQL.js:", error);
+    throw new Error(`Database initialization failed: ${error.message}`);
+  }
+}
+
 export default setupDatabase;
-
-
-// testing my sql.js on development
-setupDatabase().then(dbMethods => {
-  // Example usage
-  const { signUp, signIn, addTodo, getTodos, updateTodo, deleteTodo, updateProfile } = dbMethods;
-  
-  // Sign up a user
-  console.log(signUp('ok@gmail.com', 'password123'));
-
-  // Sign in a user
-  console.log(signIn('ok@gmail.com', 'password123'));
-
-  // Add a to-do
-  console.log(addTodo(1, 'Finish project', '2023-12-31', 'high'));
-
-  // Get all to-dos
-  console.log(getTodos(1));
-
-  // Update a to-do
-  console.log(updateTodo(1, 'Finish project by tonight', '2023-12-31', 'high'));
-
-  // Delete a to-do
-  console.log(deleteTodo(1));
-
-  // Update user profile
-  console.log(updateProfile(1, '1234567890', 'John Doe', 'newusername', 'newpassword'));
-});

@@ -1,15 +1,31 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import './signUpPopup.css';
 import CustomizedSnackbars from './toastNotification';
-import AuthContext from './AuthContext';
 import setupDatabase from '../SQLjs/sql';
 
-function SignUpPopup() {
+function SignUpPopup({setIsAuthenticated}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: '', type: '' });
-  const { setIsSignedIn } = useContext(AuthContext);
+  const [dbMethods, setDbMethods] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [initError, setInitError] = useState(null);
+
+  useEffect(() => {
+    async function initDb() {
+      try {
+        const methods = await setupDatabase();
+        setDbMethods(methods);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Failed to initialize database:", error);
+        setInitError(error.message);
+        setIsLoading(false);
+      }
+    }
+    initDb();
+  }, []);
 
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
@@ -45,6 +61,11 @@ function SignUpPopup() {
       errorMessage = 'Password must be at least 8 characters long and include uppercase, lowercase, number, and special character';
     }
 
+    if (password !== confirmPassword) {
+      isProceed = false;
+      errorMessage = 'Passwords do not match';
+    }
+
     if (!isProceed) {
       setSnackbar({ open: true, message: errorMessage, type: 'warning' });
     }
@@ -55,19 +76,32 @@ function SignUpPopup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (isLoading) {
+      setSnackbar({ open: true, message: 'Database is still initializing, please wait.', type: 'warning' });
+      return;
+    }
+
+    if (initError) {
+      setSnackbar({ open: true, message: `Database initialization failed: ${initError}`, type: 'error' });
+      return;
+    }
+
     if (isValidate()) {
-      if (password !== confirmPassword) {
-        setSnackbar({ open: true, message: 'Passwords do not match', type: 'error' });
+      if (!dbMethods) {
+        setSnackbar({ open: true, message: 'Database not initialized properly. Please refresh the page.', type: 'error' });
         return;
       }
 
       try {
-        const dbMethods = await setupDatabase();
         const result = await dbMethods.signUp(username, password);
 
         if (result.success) {
+
+          setTimeout(()=>{
+            localStorage.setItem('userId', result.userId);
+          }, 1)
           setSnackbar({ open: true, message: 'Sign up successful', type: 'success' });
-          setIsSignedIn(true);
+          setIsAuthenticated(true);
         } else {
           setSnackbar({ open: true, message: `Sign up failed: ${result.error}`, type: 'error' });
         }
@@ -76,6 +110,14 @@ function SignUpPopup() {
       }
     }
   };
+
+  if (isLoading) {
+    return <div>Initializing database...</div>;
+  }
+
+  if (initError) {
+    return <div>Failed to initialize database: {initError}</div>;
+  }
 
   return (
     <div className='signUpPopup'>
@@ -86,18 +128,21 @@ function SignUpPopup() {
           value={username}
           onChange={e => setUsername(e.target.value)}
           placeholder='Email'
+          autoComplete='auto'
         />
         <input
           type='password'
           value={password}
           onChange={e => setPassword(e.target.value)}
           placeholder='Password'
+          autoComplete='auto'
         />
         <input
           type='password'
           value={confirmPassword}
           onChange={e => setConfirmPassword(e.target.value)}
           placeholder='Confirm Password'
+          autoComplete='auto'
         />
         <button type='submit'>Submit</button>
       </form>

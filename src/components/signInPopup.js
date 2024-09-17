@@ -1,14 +1,29 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useEffect } from 'react';
 import './signInPopup.css';
 import CustomizedSnackbars from './toastNotification';
-import AuthContext from './AuthContext';
 import setupDatabase from '../SQLjs/sql';
 
-function SignInPopup() {
+function SignInPopup({setIsAuthenticated}) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [snackbar, setSnackbar] = useState({ open: false, message: '', type: '' });
-  const { setIsSignedIn } = useContext(AuthContext);
+  const [dbMethods, setDbMethods] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function initDb() {
+      try {
+        const methods = await setupDatabase();
+        setDbMethods(methods);
+        setIsLoading(false);
+      } catch (error) {
+        console.error("Failed to initialize database:", error);
+        setSnackbar({ open: true, message: 'Failed to initialize database. Please refresh the page.', type: 'error' });
+        setIsLoading(false);
+      }
+    }
+    initDb();
+  }, []);
 
   const handleCloseSnackbar = () => {
     setSnackbar({ ...snackbar, open: false });
@@ -31,17 +46,27 @@ function SignInPopup() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (isLoading) {
+      setSnackbar({ open: true, message: 'Database is still initializing, please wait.', type: 'warning' });
+      return;
+    }
+
     if (validate()) {
+      if (!dbMethods) {
+        setSnackbar({ open: true, message: 'Database not initialized properly. Please refresh the page.', type: 'error' });
+        return;
+      }
+
       try {
-        const dbMethods = await setupDatabase();
         const result = await dbMethods.signIn(username, password);
 
         if (result.success) {
-          localStorage.setItem('authToken', result.user.username);
-          localStorage.setItem('userId', result.user.id); // Store userId in local storage
-          localStorage.setItem('user', JSON.stringify(result.user));
+          setTimeout(()=>{
+            localStorage.setItem('authToken', result.user.username);
+            localStorage.setItem('userId', result.user.userId);
+          }, 1)
+          setIsAuthenticated(true);
           setSnackbar({ open: true, message: 'Sign in successful', type: 'success' });
-          setIsSignedIn(true);
         } else {
           setSnackbar({ open: true, message: `Invalid username or password`, type: 'error' });
         }
@@ -50,6 +75,10 @@ function SignInPopup() {
       }
     }
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className='signInPopup'>
@@ -60,15 +89,19 @@ function SignInPopup() {
           value={username}
           onChange={e => setUsername(e.target.value)}
           placeholder='Email'
+          autoComplete='auto'
         />
         <input
           type='password'
           value={password}
           onChange={e => setPassword(e.target.value)}
           placeholder='Password'
+          autoComplete='auto'
         />
         <button type='submit'>Submit</button>
       </form>
+
+      {/* SNACKBAR */}
       <CustomizedSnackbars
         open={snackbar.open}
         message={snackbar.message}
