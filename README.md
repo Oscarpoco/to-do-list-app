@@ -12,6 +12,16 @@ This documentation covers the implementation of a cross-platform Todo List appli
 - React 
 - SQLite3
 
+##  Clone the Repository
+- git clone https://github.com/oscarpoco/to-do-list-app.git
+- cd your-react-sqlite-app
+- npm install
+
+##  Start the Backend Server and Frontend
+- npm start - (frontend)
+- cd SQLjs - (server)
+- node sql.js 
+
 ## Project Structure
 
 ```
