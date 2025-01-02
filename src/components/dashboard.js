@@ -8,27 +8,30 @@ import CustomizedSnackbars from './toastNotification';
 
 // STYLING
 import './dashboard.css';
-import { LensTwoTone } from '@mui/icons-material';
 
 function TodoList({ token, onLogout }) {
   const [todos, setTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+
+  // TODO STATE
   const [newTodo, setNewTodo] = useState({
     text: '',
     description: '',
     due_date: '',
     priority: 'medium'
   });
+
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
-  // Toast state
+
+  // TOAST STATE
   const [toast, setToast] = useState({
     open: false,
     message: '',
     severity: 'success'
   });
 
-  // Priority configuration with colors and labels
+  // PRIORITIES COLORS
   const PRIORITIES = {
     high: {
       color: '#ff4d4d',
@@ -43,7 +46,9 @@ function TodoList({ token, onLogout }) {
       label: 'Low'
     }
   };
+  // ENDS
 
+  // HANDLE TOAST
   const handleToast = (message, severity = 'success') => {
     setToast({
       open: true,
@@ -51,11 +56,15 @@ function TodoList({ token, onLogout }) {
       severity
     });
   };
+  // ENDS
 
+  // CLOSE TOAST
   const closeToast = () => {
     setToast(prev => ({ ...prev, open: false }));
   };
+  // ENDS
 
+  // FETCH TODOS
   const fetchTodos = async () => {
     setIsLoading(true);
     try {
@@ -81,6 +90,10 @@ function TodoList({ token, onLogout }) {
     fetchTodos();
   }, [token]);
 
+  // ENDS
+
+
+  // ADD TODO
   const addTodo = async (e) => {
     e.preventDefault();
     if (!newTodo.text.trim()) {
@@ -117,7 +130,9 @@ function TodoList({ token, onLogout }) {
       setIsLoading(false);
     }
   };
+  // ENDS
 
+  // DELETE A TODO
   const deleteTodo = async (id) => {
     setIsLoading(true);
     try {
@@ -135,8 +150,9 @@ function TodoList({ token, onLogout }) {
       setIsLoading(false);
     }
   };
+  // ENDS
 
-  // Rest of the helper functions remain the same
+  // MARK AS COMPLETE
   const toggleTodo = async (id, completed) => {
     try {
       const todo = todos.find(t => t.id === id);
@@ -158,7 +174,9 @@ function TodoList({ token, onLogout }) {
       handleToast(err.message, 'error');
     }
   };
+  // ENDS
 
+  // GET PRIORITY
   const getPriorityStyle = (priority) => {
     return {
       backgroundColor: PRIORITIES[priority]?.color || PRIORITIES.medium.color,
@@ -170,16 +188,21 @@ function TodoList({ token, onLogout }) {
       letterSpacing: '1px'
     };
   };
+  // ENDS
 
+  // FORMAT DATE
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString();
   };
+  // ENDS
 
+
+  // EMPTY LIST
   if (isLoading && todos.length === 0) {
     return (
       <div className="todo-container">
         <div className="todo-header">
-          <h2>TodoList</h2>
+          <h2>Listify</h2>
           <button onClick={onLogout} className="logout-btn">Logout</button>
         </div>
         <div className="loading-container">
@@ -189,22 +212,33 @@ function TodoList({ token, onLogout }) {
       </div>
     );
   }
+  // ENDS
 
+  // REMAINING RENDERING
   return (
     <div className="todo-container">
+
+      {/* HEADER */}
       <div className="todo-header">
         <h2>TodoList</h2>
         <button onClick={onLogout} className="logout-btn">Logout</button>
       </div>
-      {error && <div className="error">{error}</div>}
+      {/* ENDS */}
 
+      {/* ERROR */}
+      {error && <div className="error">{error}</div>}
+      {/* ENDS */}
+
+      {/* OPEN & CLOSE FORM TO ADD A TODO */}
       <button
         onClick={() => setShowForm(!showForm)}
         className="add-todo-btn"
       >
         {showForm ? 'Cancel' : 'Add New Todo'}
       </button>
+      {/* ENDS */}
 
+      {/* FORM */}
       {showForm && (
         <form onSubmit={addTodo} className="todo-form">
           <input
@@ -243,7 +277,9 @@ function TodoList({ token, onLogout }) {
           </button>
         </form>
       )}
+      {/* ENDS */}
 
+      {/* RENDER TODO ITEMS */}
       {todos.length === 0 ? (
         <div className="empty-state">
           <p>No todos yet! Click "Add New Todo" to get started.</p>
@@ -286,13 +322,16 @@ function TodoList({ token, onLogout }) {
           ))}
         </ul>
       )}
+      {/* ENDS */}
 
+      {/* TOAST */}
       <CustomizedSnackbars
         open={toast.open}
         message={toast.message}
         severity={toast.severity}
         onClose={closeToast}
       />
+      {/* ENDS */}
     </div>
   );
 }
