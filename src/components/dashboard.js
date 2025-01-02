@@ -13,6 +13,9 @@ function TodoList({ token, onLogout }) {
   const [todos, setTodos] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
+  // SEARCH
+  const [searchQuery, setSearchQuery] = useState('');
+
   // TODO STATE
   const [newTodo, setNewTodo] = useState({
     text: '',
@@ -46,6 +49,13 @@ function TodoList({ token, onLogout }) {
       label: 'Low'
     }
   };
+  // ENDS
+
+  // FILTER
+  const filteredTodos = todos.filter(todo => 
+    todo.text.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    todo.description?.toLowerCase().includes(searchQuery.toLowerCase())
+  );
   // ENDS
 
   // HANDLE TOAST
@@ -220,7 +230,7 @@ function TodoList({ token, onLogout }) {
 
       {/* HEADER */}
       <div className="todo-header">
-        <h2>TodoList</h2>
+        <h2>Listify</h2>
         <button onClick={onLogout} className="logout-btn">Logout</button>
       </div>
       {/* ENDS */}
@@ -230,13 +240,30 @@ function TodoList({ token, onLogout }) {
       {/* ENDS */}
 
       {/* OPEN & CLOSE FORM TO ADD A TODO */}
-      <button
-        onClick={() => setShowForm(!showForm)}
-        className="add-todo-btn"
-      >
-        {showForm ? 'Cancel' : 'Add New Todo'}
-      </button>
-      {/* ENDS */}
+      <div className="search-container">
+
+        {/* SEARCH */}
+        <div className="search-input-wrapper">
+          <input
+            type="text"
+            placeholder="Search Todos"
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="search-input"
+          />
+        </div>
+        {/* SEARCH */}
+
+        {/* OPEN & CLOSE FORM TO ADD A TODO */}
+        <button
+          onClick={() => setShowForm(!showForm)}
+          className="add-todo-btn"
+        >
+          {showForm ? 'Cancel' : 'Add New Todo'}
+        </button>
+        {/* ENDS */}
+
+      </div>
 
       {/* FORM */}
       {showForm && (
@@ -280,13 +307,13 @@ function TodoList({ token, onLogout }) {
       {/* ENDS */}
 
       {/* RENDER TODO ITEMS */}
-      {todos.length === 0 ? (
+      {filteredTodos.length === 0 ? (
         <div className="empty-state">
-          <p>No todos yet! Click "Add New Todo" to get started.</p>
+          <p>No todos found!</p>
         </div>
       ) : (
         <ul className="todo-list">
-          {todos.map(todo => (
+          {filteredTodos.map(todo => (
             <li
               key={todo.id}
               className={`todo-item ${todo.completed ? 'completed' : ''}`}

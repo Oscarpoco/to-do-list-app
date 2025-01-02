@@ -35,9 +35,9 @@
   {
     font-size: 1.2rem;
     color: var(--text-primary);
-    font-weight: 600;
+    font-weight: 700;
     margin: 0;
-    letter-spacing: 1px;
+    letter-spacing: 2px;
   }
   
   .logout-btn 
@@ -58,25 +58,62 @@
     transform: translateY(-1px);
   }
   
-  .add-todo-btn 
+  .search-container 
   {
-    width: 100%;
-    padding: 0.75rem;
-    background-color: var(--primary-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+.search-input 
+{
+    padding: 10px 16px;
+    border: 2px solid #11111162;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: all 0.3s ease;
+    outline: none;
+}
+
+.search-input:focus 
+{
+    border-color: #007bff;
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
+}
+
+.search-input::placeholder 
+{
+    color: #888;
+}
+
+.add-todo-btn 
+{
+    padding: 12px 12px;
+    background-color: #007bff;
     color: white;
     border: none;
-    border-radius: 0.5rem;
-    font-weight: 500;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
     cursor: pointer;
-    transition: var(--transition);
-    margin-bottom: 1.5rem;
-  }
-  
-  .add-todo-btn:hover 
-  {
-    background-color: var(--primary-hover);
+    transition: all 0.3s ease;
+    white-space: nowrap;
+    width: auto;
+}
+
+.add-todo-btn:hover 
+{
+    background-color: #0056b3;
     transform: translateY(-1px);
-  }
+}
+
+.add-todo-btn:active 
+{
+    transform: translateY(1px);
+}
   
   .todo-form 
   {
