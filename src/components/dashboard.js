@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import "./dashboard.css";
+
+// LOADER 
+import Loader from './Loader';
+
+// TOAST
+import CustomizedSnackbars from './toastNotification';
+
+// STYLING
+import './dashboard.css';
+import { LensTwoTone } from '@mui/icons-material';
 
 function TodoList({ token, onLogout }) {
   const [todos, setTodos] = useState([]);
@@ -7,14 +16,46 @@ function TodoList({ token, onLogout }) {
   const [newTodo, setNewTodo] = useState({
     text: '',
     description: '',
-    dueDate: '',
+    due_date: '',
     priority: 'medium'
   });
   const [error, setError] = useState('');
   const [showForm, setShowForm] = useState(false);
+  // Toast state
+  const [toast, setToast] = useState({
+    open: false,
+    message: '',
+    severity: 'success'
+  });
 
+  // Priority configuration with colors and labels
+  const PRIORITIES = {
+    high: {
+      color: '#ff4d4d',
+      label: 'High'
+    },
+    medium: {
+      color: '#ffd700',
+      label: 'Medium'
+    },
+    low: {
+      color: '#90EE90',
+      label: 'Low'
+    }
+  };
 
-  // FETCH TODO LISTS
+  const handleToast = (message, severity = 'success') => {
+    setToast({
+      open: true,
+      message,
+      severity
+    });
+  };
+
+  const closeToast = () => {
+    setToast(prev => ({ ...prev, open: false }));
+  };
+
   const fetchTodos = async () => {
     setIsLoading(true);
     try {
@@ -22,7 +63,7 @@ function TodoList({ token, onLogout }) {
         headers: { 'Authorization': token }
       });
       if (response.status === 401) {
-        onLogout(); 
+        onLogout();
         return;
       }
       if (!response.ok) throw new Error('Failed to fetch todos');
@@ -30,6 +71,7 @@ function TodoList({ token, onLogout }) {
       setTodos(data);
     } catch (err) {
       setError(err.message);
+      handleToast(err.message, 'error');
     } finally {
       setIsLoading(false);
     }
@@ -38,17 +80,16 @@ function TodoList({ token, onLogout }) {
   useEffect(() => {
     fetchTodos();
   }, [token]);
-  // ENDS
 
-
-  // ADD TO DO LIST
   const addTodo = async (e) => {
     e.preventDefault();
     if (!newTodo.text.trim()) {
       setError('Title is required');
+      handleToast('Title is required', 'error');
       return;
     }
-
+  
+    setIsLoading(true);
     try {
       const response = await fetch('http://localhost:5000/api/todos', {
         method: 'POST',
@@ -64,18 +105,38 @@ function TodoList({ token, onLogout }) {
       setNewTodo({
         text: '',
         description: '',
-        dueDate: '',
+        due_date: '',
         priority: 'medium'
       });
       setShowForm(false);
+      handleToast('Todo added successfully');
     } catch (err) {
       setError(err.message);
+      handleToast(err.message, 'error');
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // ENDS
+  const deleteTodo = async (id) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': token }
+      });
+      if (!response.ok) throw new Error('Failed to delete todo');
+      setTodos(todos.filter(todo => todo.id !== id));
+      handleToast('Todo deleted successfully');
+    } catch (err) {
+      setError(err.message);
+      handleToast(err.message, 'error');
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
-  // TOGGLE TO DO
+  // Rest of the helper functions remain the same
   const toggleTodo = async (id, completed) => {
     try {
       const todo = todos.find(t => t.id === id);
@@ -85,57 +146,60 @@ function TodoList({ token, onLogout }) {
           'Content-Type': 'application/json',
           'Authorization': token
         },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           ...todo,
-          completed: !completed 
+          completed: !completed
         })
       });
       if (!response.ok) throw new Error('Failed to update todo');
       await fetchTodos();
     } catch (err) {
       setError(err.message);
+      handleToast(err.message, 'error');
     }
   };
-  // ENDS
 
-  // DELETE TO DO
-  const deleteTodo = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
-        method: 'DELETE',
-        headers: { 'Authorization': token }
-      });
-      if (!response.ok) throw new Error('Failed to delete todo');
-      setTodos(todos.filter(todo => todo.id !== id));
-    } catch (err) {
-      setError(err.message);
-    }
-  };
-  // ENDS
-
-  const getPriorityColor = (priority) => {
-    const colors = {
-      high: '#ff4d4d',
-      medium: '#ffd700',
-      low: '#90EE90'
+  const getPriorityStyle = (priority) => {
+    return {
+      backgroundColor: PRIORITIES[priority]?.color || PRIORITIES.medium.color,
+      color: priority === 'medium' ? '#000' : '#000', 
+      padding: '4px 8px',
+      borderRadius: '4px',
+      fontSize: '0.875rem',
+      fontWeight: '500',
+      letterSpacing: '1px'
     };
-    return colors[priority]
   };
 
   const formatDate = (dateString) => {
     return new Date(dateString).toLocaleDateString();
   };
 
+  if (isLoading && todos.length === 0) {
+    return (
+      <div className="todo-container">
+        <div className="todo-header">
+          <h2>TodoList</h2>
+          <button onClick={onLogout} className="logout-btn">Logout</button>
+        </div>
+        <div className="loading-container">
+          <Loader />
+          <p>Loading your todos...</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="todo-container">
       <div className="todo-header">
-        <h2>Todo List</h2>
+        <h2>TodoList</h2>
         <button onClick={onLogout} className="logout-btn">Logout</button>
       </div>
       {error && <div className="error">{error}</div>}
-      
-      <button 
-        onClick={() => setShowForm(!showForm)} 
+
+      <button
+        onClick={() => setShowForm(!showForm)}
         className="add-todo-btn"
       >
         {showForm ? 'Cancel' : 'Add New Todo'}
@@ -146,27 +210,27 @@ function TodoList({ token, onLogout }) {
           <input
             type="text"
             value={newTodo.text}
-            onChange={(e) => setNewTodo({...newTodo, text: e.target.value})}
+            onChange={(e) => setNewTodo({ ...newTodo, text: e.target.value })}
             placeholder="Title"
             required
             className="form-input"
           />
           <textarea
             value={newTodo.description}
-            onChange={(e) => setNewTodo({...newTodo, description: e.target.value})}
+            onChange={(e) => setNewTodo({ ...newTodo, description: e.target.value })}
             placeholder="Description"
             className="form-textarea"
           />
           <div className="form-row">
             <input
               type="date"
-              value={newTodo.dueDate}
-              onChange={(e) => setNewTodo({...newTodo, dueDate: e.target.value})}
+              value={newTodo.due_date}
+              onChange={(e) => setNewTodo({ ...newTodo, due_date: e.target.value })}
               className="form-input"
             />
             <select
               value={newTodo.priority}
-              onChange={(e) => setNewTodo({...newTodo, priority: e.target.value})}
+              onChange={(e) => setNewTodo({ ...newTodo, priority: e.target.value })}
               className="form-select"
             >
               <option value="low">Low Priority</option>
@@ -174,48 +238,61 @@ function TodoList({ token, onLogout }) {
               <option value="high">High Priority</option>
             </select>
           </div>
-          <button type="submit" className="submit-btn">Add Todo</button>
+          <button type="submit" className="submit-btn">
+            {isLoading ? <Loader /> : 'Add Todo'}
+          </button>
         </form>
       )}
 
-      <ul className="todo-list">
-        {todos.map(todo => (
-          <li 
-          key={todo.id} 
-            className={`todo-item ${todo.completed ? 'completed' : ''} priority-${todo.priority}`}
-            style={{ borderLeft: `4px solid ${getPriorityColor(todo.priority)}` }}
-          >
-            <div className="todo-item-header">
-              <div className="todo-item-main">
-                <input
-                  type="checkbox"
-                  checked={Boolean(todo.completed)}
-                  onChange={() => toggleTodo(todo.id, todo.completed)}
-                />
-                <span className="todo-title">{todo.text}</span>
+      {todos.length === 0 ? (
+        <div className="empty-state">
+          <p>No todos yet! Click "Add New Todo" to get started.</p>
+        </div>
+      ) : (
+        <ul className="todo-list">
+          {todos.map(todo => (
+            <li
+              key={todo.id}
+              className={`todo-item ${todo.completed ? 'completed' : ''}`}
+              style={{ borderLeft: `4px solid ${PRIORITIES[todo.priority]?.color || PRIORITIES.medium.color}` }}
+            >
+              <div className="todo-item-header">
+                <div className="todo-item-main">
+                  <input
+                    type="checkbox"
+                    checked={Boolean(todo.completed)}
+                    onChange={() => toggleTodo(todo.id, todo.completed)}
+                  />
+                  <span className="todo-title">{todo.text}</span>
+                </div>
+                <button onClick={() => deleteTodo(todo.id)} className="delete-btn">
+                  {isLoading ? <Loader /> : 'Delete'}
+                </button>
               </div>
-              <button onClick={() => deleteTodo(todo.id)} className="delete-btn">
-                Delete
-              </button>
-            </div>
-            {todo.description && (
-              <p className="todo-description">{todo.description}</p>
-            )}
-            <div className="todo-item-footer">
-              {todo.dueDate && (
-                <span className="todo-date">
-                  Due: {formatDate(todo.dueDate)}
-                </span>
+              {todo.description && (
+                <p className="todo-description">{todo.description}</p>
               )}
-              <span className="todo-priority" style={{ backgroundColor: getPriorityColor(todo.priority) }}>
-                {todo.priority ?
-                  todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1) :
-                  'Medium'}
-              </span>
-            </div>
-          </li>
-        ))}
-      </ul>
+              <div className="todo-item-footer">
+                {todo.due_date && (
+                  <span className="todo-date">
+                    Due: {formatDate(todo.due_date)}
+                  </span>
+                )}
+                <span className="todo-priority" style={getPriorityStyle(todo.priority)}>
+                  {PRIORITIES[todo.priority]?.label || 'Medium'}
+                </span>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      <CustomizedSnackbars
+        open={toast.open}
+        message={toast.message}
+        severity={toast.severity}
+        onClose={closeToast}
+      />
     </div>
   );
 }

@@ -72,12 +72,27 @@ app.get('/api/todos', authenticate, (req, res) => {
 });
 
 app.post('/api/todos', authenticate, (req, res) => {
-  const { text } = req.body;
-  db.run('INSERT INTO todos (user_id, text, completed) VALUES (?, ?, ?)', [req.userId, text, 0], function(err) {
+  const { text, description, due_date, priority, completed } = req.body;
+
+  db.run('INSERT INTO todos (user_id, text, description, due_date, priority, completed) VALUES (?, ?, ?, ?, ?, ?)', 
+    [req.userId, text, description, due_date, priority, completed], function(err) {
     if (err) return res.status(500).json({ message: 'Error creating todo' });
-    res.json({ id: this.lastID, text, completed: 0 });
+    
+    const data = {
+      id: this.lastID,
+      user_id: req.userId,
+      text,
+      description,
+      due_date,
+      priority,
+      completed
+    };
+
+    console.log("My data", data);
+    res.status(201).json(data);
   });
 });
+
 
 app.put('/api/todos/:id', authenticate, (req, res) => {
   const { id } = req.params;
