@@ -1,324 +1,223 @@
 import React, { useState, useEffect } from 'react';
+import "./dashboard.css";
 
-// DATABASE
-import setupDatabase from '../SQLjs/sql';
-
-// COMPONENTS
-import './dashboard.css';
-import SearchInput from './search';
-import UserPopup from './UserPopup';
-import Loader from './Loader';
-import CustomizedSnackbars from './toastNotification';
-
-// ICONS
-import { BiEdit } from "react-icons/bi";
-import { AiFillDelete } from "react-icons/ai";
-import { FcApproval } from "react-icons/fc";
-import { LuListTodo } from "react-icons/lu";
-import { RiLogoutBoxLine } from "react-icons/ri";
-import { FaRegCircleUser } from "react-icons/fa6";
-import { MdOutlinePendingActions } from "react-icons/md";
-
-
-function Dashboard({ setIsSignedIn }) {
-  const [isPopupVisible, setIsPopupVisible] = useState(false);
-  const [isFormVisible, setIsFormVisible] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [tasks, setTasks] = useState([]);
-  const [filteredTasks, setFilteredTasks] = useState([]);
-  const [task, setTask] = useState("");
-  const [date, setDate] = useState("");
-  const [priority, setPriority] = useState("none");
-  const [isEditing, setIsEditing] = useState(false);
-  const [editIndex, setEditIndex] = useState(null);
-  const [snackbar, setSnackbar] = useState({ open: false, message: '', type: '' });
-  const [profile, setProfile] = useState({
-    username: '',
-    picture: '',
-    password: '',
-    name: '',
-    phone: ''
+function TodoList({ token, onLogout }) {
+  const [todos, setTodos] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [newTodo, setNewTodo] = useState({
+    text: '',
+    description: '',
+    dueDate: '',
+    priority: 'medium'
   });
+  const [error, setError] = useState('');
+  const [showForm, setShowForm] = useState(false);
 
-  
-  const userId = localStorage.getItem('userId');
-  const [db, setDb] = useState(null);
 
-  useEffect(() => {
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
-  }, []);
-
-  // Initialize the database
-  useEffect(() => {
-    async function initializeDatabase() {
-      const database = await setupDatabase();
-      setDb(database);
-    }
-    initializeDatabase();
-  }, []);
-
-  // Fetch tasks once the database is ready and the userId is available
-  useEffect(() => {
-    if (db && userId) {
-      fetchTasks();
-    }
-  }, [db, userId]);
-
-  const fetchTasks = async () => {
-    if (db && userId) {
-      try {
-       
-        const userTasks = db.getTodos(userId);
-
-        setTasks(userTasks || []); 
-        setFilteredTasks(userTasks || []);  
-
-      } catch (error) {
-        setSnackbar({ open: true, message: 'Error Fetching Tasks', type: 'error' });  
-      }
-    } else {
-      setSnackbar({ open: true, message: 'Database or userId not available yet.', type: 'error' });
-    }
-  };
-
-  const togglePopup = () => {
-    setIsPopupVisible(!isPopupVisible);
-  };
-
-  // LOGOUT
-  const handleLogout = () => {
+  // FETCH TODO LISTS
+  const fetchTodos = async () => {
     setIsLoading(true);
-
-    setTimeout(() => {
-      setIsSignedIn(false);
-      setIsLoading(false);
-    }, 2000);
-  };
-
-  const toggleFormVisibility = () => {
-    setIsFormVisible(!isFormVisible);
-    if (isFormVisible) {
-      // Clear form fields on closing the form
-      setTask("");
-      setDate("");
-      setPriority("none");
-      setIsEditing(false);
-      setEditIndex(null);
-    }
-  };
-
-  // Handle input changes
-  const handleTaskChange = (e) => {
-    setTask(e.target.value);
-  };
-
-  const handleDateChange = (e) => {
-    setDate(e.target.value);
-  };
-
-  const handlePriorityChange = (e) => {
-    setPriority(e.target.value); 
-  };
-
-  // Handle form submission
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (db) {
-      if (isEditing) {
-
-        // Update task
-        const taskToUpdate = filteredTasks[editIndex];
-        db.updateTodo(taskToUpdate.id, task, new Date(date).toISOString(), priority);
-        setSnackbar({ open: true, message: 'Successfully added.', type: 'success' });
-      } else {
-        // Add new task
-        db.addTodo(userId, task, new Date(date).toISOString(), priority); 
-        setSnackbar({ open: true, message: 'Successfully added.', type: 'success' });
+    try {
+      const response = await fetch('http://localhost:5000/api/todos', {
+        headers: { 'Authorization': token }
+      });
+      if (response.status === 401) {
+        onLogout(); 
+        return;
       }
-      fetchTasks();
-      toggleFormVisibility();
+      if (!response.ok) throw new Error('Failed to fetch todos');
+      const data = await response.json();
+      setTodos(data);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  // Handle task editing
-  const handleEdit = (index) => {
-    const taskToEdit = filteredTasks[index];
-    setTask(taskToEdit.task);
-    setDate(taskToEdit.date);
-    setPriority(taskToEdit.priority);
-    setIsFormVisible(true);
-    setIsEditing(true);
-    setEditIndex(index);
-  };
-
-  // Handle task deletion
-  const handleDelete = (id) => {
-    if (db) {
-      db.deleteTodo(id);
-      fetchTasks();
-      setSnackbar({ open: true, message: 'Successfullu deleted.', type: 'success' });
-    }
-  };
-
-  // Update profile data
-  const handleProfileChange = (updatedProfile) => {
-    setProfile(updatedProfile);
-  };
-
-  // Get priority color for display
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case "High":
-        return "rgba(254, 1, 1, 0.23)";
-      case "Medium":
-        return "rgba(255, 255, 0, 0.221)";
-      case "Low":
-        return "rgba(0, 128, 0, 0.205)";
-      default:
-        return "white";
-    }
-  };
-
-  // Search for tasks based on the search term
-  const searchTasks = (searchTerm) => {
-    if (searchTerm === "") {
-      setFilteredTasks(tasks);
-    } else {
-      const filtered = tasks.filter(task =>
-        task.task.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-      setFilteredTasks(filtered);
-    }
-  };
-
-  // HANDLE CLOSE THE SNACKBAR
-  const handleCloseSnackbar = () => {
-    setSnackbar({ ...snackbar, open: false });
-  };
-
-  // LOADING
-  if (isLoading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader />
-      </div>
-    );
-  }
+  useEffect(() => {
+    fetchTodos();
+  }, [token]);
   // ENDS
 
+
+  // ADD TO DO LIST
+  const addTodo = async (e) => {
+    e.preventDefault();
+    if (!newTodo.text.trim()) {
+      setError('Title is required');
+      return;
+    }
+
+    try {
+      const response = await fetch('http://localhost:5000/api/todos', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify(newTodo)
+      });
+      if (!response.ok) throw new Error('Failed to add todo');
+      const data = await response.json();
+      setTodos([...todos, data]);
+      setNewTodo({
+        text: '',
+        description: '',
+        dueDate: '',
+        priority: 'medium'
+      });
+      setShowForm(false);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+
+  // ENDS
+
+  // TOGGLE TO DO
+  const toggleTodo = async (id, completed) => {
+    try {
+      const todo = todos.find(t => t.id === id);
+      const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': token
+        },
+        body: JSON.stringify({ 
+          ...todo,
+          completed: !completed 
+        })
+      });
+      if (!response.ok) throw new Error('Failed to update todo');
+      await fetchTodos();
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  // ENDS
+
+  // DELETE TO DO
+  const deleteTodo = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:5000/api/todos/${id}`, {
+        method: 'DELETE',
+        headers: { 'Authorization': token }
+      });
+      if (!response.ok) throw new Error('Failed to delete todo');
+      setTodos(todos.filter(todo => todo.id !== id));
+    } catch (err) {
+      setError(err.message);
+    }
+  };
+  // ENDS
+
+  const getPriorityColor = (priority) => {
+    const colors = {
+      high: '#ff4d4d',
+      medium: '#ffd700',
+      low: '#90EE90'
+    };
+    return colors[priority]
+  };
+
+  const formatDate = (dateString) => {
+    return new Date(dateString).toLocaleDateString();
+  };
+
   return (
-    <div className='dashboard'>
-      <div className='menu-box'>
-        <div className='top'>
-          <div className='logo'>
-            <h3>Lis<span>tify</span><LuListTodo className='icon' /></h3>
-          </div>
-        </div>
-        <div className='middle'>
-        </div>
-        <div className='bottom'>
-          <button onClick={handleLogout}><RiLogoutBoxLine className='icon' /> Logout</button>
-        </div>
+    <div className="todo-container">
+      <div className="todo-header">
+        <h2>Todo List</h2>
+        <button onClick={onLogout} className="logout-btn">Logout</button>
       </div>
-      <div className='to-do-box'>
-        <div className='searchNav'>
-          <div className='search'>
-            <SearchInput searchTasks={searchTasks} />
+      {error && <div className="error">{error}</div>}
+      
+      <button 
+        onClick={() => setShowForm(!showForm)} 
+        className="add-todo-btn"
+      >
+        {showForm ? 'Cancel' : 'Add New Todo'}
+      </button>
+
+      {showForm && (
+        <form onSubmit={addTodo} className="todo-form">
+          <input
+            type="text"
+            value={newTodo.text}
+            onChange={(e) => setNewTodo({...newTodo, text: e.target.value})}
+            placeholder="Title"
+            required
+            className="form-input"
+          />
+          <textarea
+            value={newTodo.description}
+            onChange={(e) => setNewTodo({...newTodo, description: e.target.value})}
+            placeholder="Description"
+            className="form-textarea"
+          />
+          <div className="form-row">
+            <input
+              type="date"
+              value={newTodo.dueDate}
+              onChange={(e) => setNewTodo({...newTodo, dueDate: e.target.value})}
+              className="form-input"
+            />
+            <select
+              value={newTodo.priority}
+              onChange={(e) => setNewTodo({...newTodo, priority: e.target.value})}
+              className="form-select"
+            >
+              <option value="low">Low Priority</option>
+              <option value="medium">Medium Priority</option>
+              <option value="high">High Priority</option>
+            </select>
           </div>
-          <div className='profile'>
-            <button onClick={toggleFormVisibility}><span>+</span></button>
-            <div className='circle' onClick={togglePopup}>
-              {profile.picture ? (
-                <img src={profile.picture} alt='Profile' className='profile-picture' />
-              ) : (
-                <FaRegCircleUser className='icon' />
+          <button type="submit" className="submit-btn">Add Todo</button>
+        </form>
+      )}
+
+      <ul className="todo-list">
+        {todos.map(todo => (
+          <li 
+          key={todo.id} 
+            className={`todo-item ${todo.completed ? 'completed' : ''} priority-${todo.priority}`}
+            style={{ borderLeft: `4px solid ${getPriorityColor(todo.priority)}` }}
+          >
+            <div className="todo-item-header">
+              <div className="todo-item-main">
+                <input
+                  type="checkbox"
+                  checked={Boolean(todo.completed)}
+                  onChange={() => toggleTodo(todo.id, todo.completed)}
+                />
+                <span className="todo-title">{todo.text}</span>
+              </div>
+              <button onClick={() => deleteTodo(todo.id)} className="delete-btn">
+                Delete
+              </button>
+            </div>
+            {todo.description && (
+              <p className="todo-description">{todo.description}</p>
+            )}
+            <div className="todo-item-footer">
+              {todo.dueDate && (
+                <span className="todo-date">
+                  Due: {formatDate(todo.dueDate)}
+                </span>
               )}
+              <span className="todo-priority" style={{ backgroundColor: getPriorityColor(todo.priority) }}>
+                {todo.priority ?
+                  todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1) :
+                  'Medium'}
+              </span>
             </div>
-          </div>
-        </div>
-        <div className='to-do-main'>
-          {isFormVisible && (
-            <form className='main-form' onSubmit={handleSubmit}>
-              <div className='task-descriptions'>
-                <input 
-                  type='text' 
-                  name='my-task' 
-                  placeholder='Task' 
-                  required 
-                  value={task} 
-                  onChange={handleTaskChange} 
-                />
-              </div>
-              <div className='task-date'>
-                <input 
-                  type='date' 
-                  name='my-date' 
-                  placeholder='Date' 
-                  required 
-                  value={date} 
-                  onChange={handleDateChange} 
-                />
-              </div>
-              <div className='task-priority'>
-                <label htmlFor="options">Priority</label>
-                <select 
-                  id="options" 
-                  value={priority} 
-                  onChange={handlePriorityChange}
-                >
-                  <option value="none">Select</option>
-                  <option value="High">High</option>
-                  <option value="Medium">Medium</option>
-                  <option value="Low">Low</option>
-                </select>
-              </div>
-              <div className='task-button'>
-                <button type='submit'>Approve <FcApproval className='icon'/></button>
-              </div>
-            </form>
-            
-            // SNACKBAR
-
-          )}
-          <div className='pending'>
-            <div className='title'>
-              My Tasks <MdOutlinePendingActions className='icon'/>
-            </div>
-            <div className='tasks'>
-              {filteredTasks.map((task, index) => (
-                <div 
-                  key={index} 
-                  className='task-item' 
-                  style={{ backgroundColor: getPriorityColor(task.priority) }}
-                >
-                  <div className='task-info'>
-                    <p className='item-header'>{task.task}</p>
-                    <p>{new Date(task.date).toLocaleDateString()}</p>
-                    <p>{task.priority}</p>
-                  </div>
-                  <div className='task-actions'>
-                    <button onClick={() => handleEdit(index)}><BiEdit className='edit-icon'/></button>
-                    <button onClick={() => handleDelete(task.id)}><AiFillDelete className='delete-icon'/></button>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* POPUPS */}
-      {isPopupVisible && <UserPopup profile={profile} onClose={togglePopup} onProfileChange={handleProfileChange} />}
-      <CustomizedSnackbars 
-        open={snackbar.open}
-        message={snackbar.message}
-        severity={snackbar.type}
-        onClose={handleCloseSnackbar}
-      />
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
 
-export default Dashboard;
+export default TodoList;

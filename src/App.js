@@ -1,24 +1,35 @@
-// App.jsx
-import './App.css';
-import { useState } from 'react';
-import Dashboard from './components/dashboard';
-import SignIn from './components/signIn';
-
-
+import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
+import Login from "./components/signIn.js";
+import Register from './components/Register.js';
+import TodoList from './components/dashboard.js';
+import './components/signIn.css';
 
 function App() {
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
-  const [isSignedIn, setIsSignedIn] = useState(false)
+  const handleLogin = (newToken) => {
+    localStorage.setItem('token', newToken);
+    setToken(newToken);
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    setToken(null);
+  };
+
   return (
-
-      <div className="App">
-        <main>
-          {isSignedIn ? <Dashboard setIsSignedIn={setIsSignedIn} /> : <SignIn setIsSignedIn={setIsSignedIn} />}
-        </main>
+    <Router>
+      <div className="app">
+        <Routes>
+          <Route path="/login" element={!token ? <Login onLogin={handleLogin} /> : <Navigate to="/todos" />} />
+          <Route path="/register" element={!token ? <Register /> : <Navigate to="/todos" />} />
+          <Route path="/todos" element={token ? <TodoList token={token} onLogout={handleLogout} /> : <Navigate to="/login" />} />
+          <Route path="/" element={<Navigate to={token ? "/todos" : "/login"} />} />
+        </Routes>
       </div>
- 
+    </Router>
   );
 }
-
 
 export default App;

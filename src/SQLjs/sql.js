@@ -1,237 +1,99 @@
-import initSqlJs from 'sql.js';
+// Backend: server.js
+const express = require('express');
+const bodyParser = require('body-parser');
+const cors = require('cors');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const sqlite3 = require('sqlite3').verbose();
 
-async function setupDatabase() {
-  try {
-    // INITIALIZING DATABASE
-    const SQL = await initSqlJs({
-      locateFile: file => `https://sql.js.org/dist/${file}`
-    });
+const app = express();
+const PORT = 5000;
+const SECRET_KEY = 'secret123';
 
-    // PERSISTING WITH LOCAL STORAGE
-    let db;
-    
-    const savedDb = localStorage.getItem('sqliteDb');
-    if (savedDb) {
-      db = new SQL.Database(new Uint8Array(JSON.parse(savedDb)));
-      
-    } else {
-      db = new SQL.Database();
-    
-    }
+app.use(cors());
+app.use(bodyParser.json());
 
-    // CREATING TABLES 
-    db.run(`
-      CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        username TEXT UNIQUE,
-        password TEXT,
-        phone INTEGER UNIQUE,
-        name TEXT
-      );
-      
-      CREATE TABLE IF NOT EXISTS todos (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_id INTEGER,
-        task TEXT,
-        priority TEXT,
-        date TEXT,
-        FOREIGN KEY(user_id) REFERENCES users(id)
-      );
-    `);
-    
+// Database setup
+const db = new sqlite3.Database(':memory:');
+db.serialize(() => {
+  db.run(`CREATE TABLE users (id INTEGER PRIMARY KEY, email TEXT, password TEXT)`);
+  db.run(`CREATE TABLE todos (
+  id INTEGER PRIMARY KEY,
+  user_id INTEGER,
+  text TEXT,
+  description TEXT,
+  due_date DATE,
+  priority TEXT DEFAULT 'medium',
+  completed INTEGER DEFAULT 0
+  );`);
+});
 
-    // SAVE DB TO LOCALSTORAGE
-    function saveDb() {
-      const data = db.export();
-      const arr = new Uint8Array(data);
-      localStorage.setItem('sqliteDb', JSON.stringify(Array.from(arr)));
-    }
+// Authentication middleware
+const authenticate = (req, res, next) => {
+  const token = req.headers['authorization'];
+  if (!token) return res.status(401).json({ message: 'No token provided' });
 
+  jwt.verify(token, SECRET_KEY, (err, decoded) => {
+    if (err) return res.status(401).json({ message: 'Invalid token' });
+    req.userId = decoded.id;
+    next();
+  });
+};
 
-    // SIGN UP FUNCTION
-    function signUp(username, password) {
-      try {
+// User routes
+app.post('/api/auth/register', async (req, res) => {
+  const { email, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  db.run('INSERT INTO users (email, password) VALUES (?, ?)', [email, hashedPassword], function(err) {
+    if (err) return res.status(500).json({ message: 'Error registering user' });
+    res.json({ id: this.lastID });
+  });
+});
 
-        console.log("Attempting to sign up user:", username);
+app.post('/api/auth/login', (req, res) => {
+  const { email, password } = req.body;
+  db.get('SELECT * FROM users WHERE email = ?', [email], async (err, user) => {
+    if (err || !user) return res.status(400).json({ message: 'User not found' });
 
-        const checkStmt = db.prepare("SELECT id FROM users WHERE username = ?");
-        const existingUser = checkStmt.getAsObject([username]);
-        checkStmt.free();
+    const validPassword = await bcrypt.compare(password, user.password);
+    if (!validPassword) return res.status(400).json({ message: 'Invalid password' });
 
-        if (existingUser.id) {
+    const token = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: '1h' });
+    res.json({ token });
+  });
+});
 
-          console.log("User already exists:", username);
+// Todo routes
+app.get('/api/todos', authenticate, (req, res) => {
+  db.all('SELECT * FROM todos WHERE user_id = ?', [req.userId], (err, rows) => {
+    if (err) return res.status(500).json({ message: 'Error fetching todos' });
+    res.json(rows);
+  });
+});
 
-          return { success: false, error: 'User already exists' };
-        }
+app.post('/api/todos', authenticate, (req, res) => {
+  const { text } = req.body;
+  db.run('INSERT INTO todos (user_id, text, completed) VALUES (?, ?, ?)', [req.userId, text, 0], function(err) {
+    if (err) return res.status(500).json({ message: 'Error creating todo' });
+    res.json({ id: this.lastID, text, completed: 0 });
+  });
+});
 
-        const stmt = db.prepare("INSERT INTO users (username, password) VALUES (?, ?)");
-        stmt.run([username, password]);
-        stmt.free();
-        
-        const userId = db.exec("SELECT last_insert_rowid() as id")[0].values[0][0];
+app.put('/api/todos/:id', authenticate, (req, res) => {
+  const { id } = req.params;
+  const { text, completed } = req.body;
+  db.run('UPDATE todos SET text = ?, completed = ? WHERE id = ? AND user_id = ?', [text, completed, id, req.userId], function(err) {
+    if (err) return res.status(500).json({ message: 'Error updating todo' });
+    res.json({ updated: this.changes });
+  });
+});
 
-        console.log("User signed up successfully with ID:", userId);
-        
-        saveDb();
-        return { success: true, userId: userId.toString() };
-      } catch (error) {
-        console.error("Sign up failed:", error);
-        return { success: false, error: error.message };
-      }
-    }
+app.delete('/api/todos/:id', authenticate, (req, res) => {
+  const { id } = req.params;
+  db.run('DELETE FROM todos WHERE id = ? AND user_id = ?', [id, req.userId], function(err) {
+    if (err) return res.status(500).json({ message: 'Error deleting todo' });
+    res.json({ deleted: this.changes });
+  });
+});
 
-
-    // SIGN IN FUNCTION
-    function signIn(username, password) {
-      try {
-        console.log("Attempting to sign in user:", username);
-        const stmt = db.prepare("SELECT id, username FROM users WHERE username = ? AND password = ?");
-        const result = stmt.getAsObject([username, password]);
-        stmt.free();
-
-        if (result.id) {
-
-          console.log("User signed in successfully:", result.username);
-
-          return { 
-            success: true, 
-            user: { 
-              userId: result.id.toString(), 
-              username: result.username
-            } 
-          };
-        } else {
-          console.log("Sign in failed: Invalid credentials");
-          return { success: false, error: 'Invalid username or password' };
-        }
-      } catch (error) {
-        console.error("Sign in failed:", error);
-        return { success: false, error: error.message };
-      }
-    }
-
-    // TO DO CRUD OPERATIONS
-
-    // Fetch todos for a user
-    function getTodos(userId) {
-      try {
-        const stmt = db.prepare("SELECT * FROM todos WHERE user_id = ?");
-        stmt.bind([userId]); // Bind the userId to the prepared statement
-        
-        const todos = [];
-        while (stmt.step()) {
-          const todo = stmt.getAsObject();
-          console.log("Fetched todo:", todo); // Debugging log for each fetched todo
-          todos.push(todo);
-        }
-        stmt.free();
-        
-        console.log("All fetched todos for user:", todos); // Debugging log for all todos
-        return todos;
-      } catch (error) {
-        console.error("Failed to fetch todos:", error);
-        return [];
-      }
-    }
-    
-
-   // Add a new todo
-function addTodo(userId, task, date, priority) {
-  try {
-    // Ensure date is in a string format (e.g., ISO format)
-    const formattedDate = new Date(date).toISOString();
-
-    const stmt = db.prepare("INSERT INTO todos (user_id, task, date, priority) VALUES (?, ?, ?, ?)");
-    stmt.run([userId, task, formattedDate, priority]);
-    stmt.free();
-    saveDb();
-        console.log('Task', task)
-        console.log('id', userId)
-        console.log('date', date)
-        console.log('Priority', priority)
-    return { success: true };
-    
-  } catch (error) {
-    console.error("Failed to add todo:", error);
-    return { success: false, error: error.message };
-  }
-}
-
-
-    // Update a todo
-    function updateTodo(id, task, date, priority) {
-      try {
-        const stmt = db.prepare("UPDATE todos SET task = ?, date = ?, priority = ? WHERE id = ?");
-        stmt.run([task, date, priority, id]);
-        stmt.free();
-        saveDb();
-        return { success: true };
-      } catch (error) {
-        console.error("Failed to update todo:", error);
-        return { success: false, error: error.message };
-      }
-    }
-
-    // Delete a todo
-    function deleteTodo(id) {
-      try {
-        const stmt = db.prepare("DELETE FROM todos WHERE id = ?");
-        stmt.run([id]);
-        stmt.free();
-        saveDb();
-        return { success: true };
-      } catch (error) {
-        console.error("Failed to delete todo:", error);
-        return { success: false, error: error.message };
-      }
-    }
-
-    // UPDATE PROFILE
-    // Fetch profile data
-    async function fetchProfile(userId) {
-      try {
-        const stmt = db.prepare("SELECT username, picture, name, phone FROM users WHERE id = ?");
-        stmt.bind([userId]);
-
-        const profile = stmt.getAsObject();
-        stmt.free();
-
-        return profile;
-      } catch (error) {
-        console.error("Failed to fetch profile:", error);
-        return {};
-      }
-    }
-
-    // Update profile data
-    async function updateProfile(userId, { username, picture, name, phone }) {
-      try {
-        const stmt = db.prepare("UPDATE users SET username = ?, picture = ?, name = ?, phone = ? WHERE id = ?");
-        stmt.run([username, picture, name, phone, userId]);
-        stmt.free();
-        saveDb();
-        return { success: true };
-      } catch (error) {
-        console.error("Failed to update profile:", error);
-        return { success: false, error: error.message };
-      }
-    }
-    console.log("Database setup completed successfully");
-    return {
-      signUp,
-      signIn,
-      getTodos,
-      addTodo,
-      updateTodo,
-      deleteTodo,
-      fetchProfile,
-      updateProfile
-    };
-  } catch (error) {
-    console.error("Failed to initialize SQL.js:", error);
-    throw new Error(`Database initialization failed: ${error.message}`);
-  }
-}
-
-export default setupDatabase;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

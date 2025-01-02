@@ -1,278 +1,116 @@
-
-.sign-in
-{
-    display: flex;
-    flex-direction: column;
-    width: 100%;
-    height: 100%;
-    justify-content: space-between;
-    align-items: center;
-    padding: 9px;
-    padding-bottom: 0;
-    background: inherit;
-}
-
-.logo
-{
-    width: 100%;
-    height: 10%;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    /* padding:0 20px; */
-}
-
-.logo button
-{
-  width: 70px;
-  font-size: 16px;
-  font-weight: bold;
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-.logo .icon
-{
-    color: black;
-    margin-left: 2.5px;
-}
-
-.logo h3
-{
-    display: flex;
-    align-items: center;
-}
-
-
-.display-sign-content
-{
-    width: 100%;
-    height: 82%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0.3em;
-}
-
-.welcome-message
-{
-    width: 50%;
-    height: 100%;
-    display: flex;
-    flex-direction: column;
-}
-
-
-
-.welcome-message p
-{
-   font-size: 2em;
-   font-weight: bold;
-}
-span
-{
-    color: red;
-}
-
-.slogan
-{
-    height: 38%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.slogan img
-{
-    width: 40%;
-    height: 100%;
-}
-
-.login-box
-{
-    width: 50%;
-    height: 90%;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 0.2em;
-}
-
-.signIn-Nav
-{
-    height: 15%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 3.6em;
-}
-
-.signIn-Nav button
-{
-    height:65%;
-    width: 30%;
-    font-weight: bold;
-    border: 2px solid rgba(255, 255, 255, 0.7);
-    border-radius: 5px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: rgba(255, 255, 255, 0.7);
-    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-    gap: 0.5em;
-    cursor: pointer;
-}
-
-.signIn-Nav button:focus
-{
-    background: silver;
-    border: 2px solid silver;
-}
-
-
-.signIn-Nav .icon
-{
-    font-size: 15px;
-    color: red;
-    font-weight: bold;
-}
-
-
-.signIn-form
-{
-    height: 85%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-footer
-{
-    width: 100%;
-    height: 8%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 0.5em;
-    background: inherit;
-}
-
-.social-icons
-{
-    width: 100%;
-    height: 70%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 1.5em;
-    border-bottom: 1px solid black;
-    padding: 5px 0;
-}
-
-.social-icons .social-fa 
-{
-  border: 1px solid black;
-  background: inherit;
-  height: 18px;
-  width: 18px;
-  border-radius: 50%;
-  color: red;
-  padding: 5px 5px;
+/* signIn.css */
+.login-container {
+  min-height: 100vh;
   display: flex;
-  justify-content: center;
   align-items: center;
-  cursor: pointer;
+  justify-content: center;
+  padding: 1rem;
+  background-color: #f5f5f5;
 }
 
-.developer
-{
+.login-card {
   width: 100%;
-  height: 30%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  color: black;
-  font-size: 80%;
-  color: rgba(0, 128, 0, 0.205);
+  max-width: 400px;
+  background-color: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
+.login-card h2 {
+  text-align: center;
+  color: #333;
+  font-size: 1.875rem;
+  font-weight: bold;
+  margin-bottom: 2rem;
+}
 
+.error-message {
+  background-color: #fef2f2;
+  color: #dc2626;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1.5rem;
+}
 
+.form-group {
+  margin-bottom: 1.5rem;
+}
 
-@media only screen and (max-width: 740px) 
-{ 
-  .logo
-  {
-    height: 10%;
+.form-group label {
+  display: block;
+  font-size: 0.875rem;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.form-group input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+}
+
+button {
+  width: 100%;
+  background-color: #3b82f6;
+  color: white;
+  font-weight: 500;
+  padding: 0.75rem 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #2563eb;
+}
+
+.register-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  color: #6b7280;
+}
+
+.register-link a {
+  color: #3b82f6;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.register-link a:hover {
+  color: #2563eb;
+}
+
+/* Media Queries */
+@media (max-width: 640px) {
+  .login-card {
+    padding: 1.5rem;
   }
-
-  .display-sign-content
-  {
-    flex-direction: column;
-    align-items: center;
-    justify-content: start;
-  }
-
-  .welcome-message
-  {
-    width: 95%;
-    height: 40%;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-  }
-
-  .welcome-message p
-  {
-    font-size: 1.2em;
-  }
-
-  .slogan
-  {
-    width: 95%;
-    height: 60%;
-    align-items: center;
-  }
-
-  .slogan img
-  {
-    width: 50%;
-    height: 100%;
-  }
-
-  .login-box
-  {
-    height: 55%;
-    width: 100%;
-  }
-
-  .signIn-Nav
-  {
-    height: 25%;
-    width: 100%;
-    justify-content: center;
-  }
-
-  .signIn-Nav button 
-  {
-    font-size: auto;
-  }
-
-  .signIn-form
-  {
-      height: 100%;
-      width: 100%;
-  }
-
-
   
+  .login-card h2 {
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+}
+
+/* Prevent any unwanted scrolling */
+html, body {
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
 }

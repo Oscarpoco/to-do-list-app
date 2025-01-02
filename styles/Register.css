@@ -1,0 +1,140 @@
+
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e4e8eb 100%);
+}
+
+.auth-container h2 {
+    font-size: 2rem;
+    color: #2d3748;
+    margin-bottom: 2rem;
+    font-weight: 600;
+}
+
+.auth-container form {
+    width: 100%;
+    max-width: 400px;
+    background: white;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.auth-container input {
+    width: 100%;
+    padding: 0.75rem;
+    margin-bottom: 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 6px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.auth-container input:focus {
+    outline: none;
+    border-color: #4299e1;
+    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.15);
+}
+
+.auth-container input::placeholder {
+    color: #a0aec0;
+}
+
+.auth-container button {
+    width: 100%;
+    padding: 0.75rem;
+    background-color: #4299e1;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.auth-container button:hover {
+    background-color: #3182ce;
+}
+
+.auth-container button:active {
+    transform: translateY(1px);
+}
+
+.auth-container p {
+    margin-top: 1.5rem;
+    text-align: center;
+    color: #4a5568;
+}
+
+.auth-container a {
+    color: #4299e1;
+    text-decoration: none;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.auth-container a:hover {
+    color: #3182ce;
+    text-decoration: underline;
+}
+
+.error {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 1rem;
+    padding: 0.75rem;
+    background-color: #fed7d7;
+    border: 1px solid #f56565;
+    border-radius: 6px;
+    color: #c53030;
+    font-size: 0.875rem;
+    text-align: center;
+}
+
+/* Media Queries for Responsiveness */
+@media (max-width: 480px) {
+    .auth-container {
+        padding: 1rem;
+    }
+
+    .auth-container form {
+        padding: 1.5rem;
+    }
+
+    .auth-container h2 {
+        font-size: 1.75rem;
+    }
+}
+
+/* Animation for error messages */
+@keyframes slideIn {
+    from {
+        transform: translateY(-10px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.error {
+    animation: slideIn 0.3s ease forwards;
+}
+
+/* Focus styles for accessibility */
+:focus {
+    outline: none;
+}
+
+:focus-visible {
+    outline: 2px solid #4299e1;
+    outline-offset: 2px;
+}
+

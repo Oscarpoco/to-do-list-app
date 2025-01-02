@@ -1,9 +1,9 @@
-// Login.jsx
+// Register.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './signIn.css';
+import './Register.css';
 
-function Login({ onLogin }) {
+function Register() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -12,24 +12,23 @@ function Login({ onLogin }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch('http://localhost:5000/api/auth/login', {
+      const response = await fetch('http://localhost:5000/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email, password }),
       });
       const data = await response.json();
       if (!response.ok) throw new Error(data.message);
-      onLogin(data.token);
-      navigate('/todos');
+      navigate('/login');
     } catch (err) {
       setError(err.message);
     }
   };
 
   return (
-    <div className="login-container">
-      <div className="login-card">
-        <h2>Welcome Back</h2>
+    <div className="register-container">
+      <div className="register-card">
+        <h2>Create Account</h2>
         
         {error && <div className="error-message">{error}</div>}
         
@@ -51,22 +50,22 @@ function Login({ onLogin }) {
             <input
               id="password"
               type="password"
-              placeholder="Enter your password"
+              placeholder="Create a password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
           </div>
           
-          <button type="submit">Sign In</button>
+          <button type="submit">Register</button>
         </form>
         
-        <p className="register-link">
-          Don't have an account? <Link to="/register">Register</Link>
+        <p className="login-link">
+          Already have an account? <Link to="/login">Login</Link>
         </p>
       </div>
     </div>
   );
 }
 
-export default Login;
+export default Register;
