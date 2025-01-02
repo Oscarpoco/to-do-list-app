@@ -1,16 +1,27 @@
 // Register.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+
+// LOADER
+import Loader from './Loader';
+
+// CSS
 import './Register.css';
 
 function Register() {
+
+  // LOCAL STATE
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+
+  // NAVIGATOR
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch('http://localhost:5000/api/auth/register', {
         method: 'POST',
@@ -22,6 +33,8 @@ function Register() {
       navigate('/login');
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -57,7 +70,10 @@ function Register() {
             />
           </div>
           
-          <button type="submit">Register</button>
+          <button type="submit">
+            
+            {isLoading ? <Loader/> : 'Register'}
+          </button>
         </form>
         
         <p className="login-link">

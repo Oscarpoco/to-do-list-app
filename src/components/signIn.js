@@ -1,16 +1,20 @@
 // Login.jsx
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import Loader from './Loader';
 import './signIn.css';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setIsLoading(true);
     try {
       const response = await fetch('http://localhost:5000/api/auth/login', {
         method: 'POST',
@@ -23,6 +27,8 @@ function Login({ onLogin }) {
       navigate('/todos');
     } catch (err) {
       setError(err.message);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -58,7 +64,9 @@ function Login({ onLogin }) {
             />
           </div>
           
-          <button type="submit">Sign In</button>
+          <button type="submit">
+            {isLoading ? <Loader/> : 'Sign In'}
+          </button>
         </form>
         
         <p className="register-link">
