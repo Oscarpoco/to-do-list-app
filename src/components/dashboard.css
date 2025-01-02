@@ -404,35 +404,32 @@ label
 .task-item
 {
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     align-items: center;
-    justify-content: center;
-    gap: 0.3em;
+    justify-content: space-between;
     border-radius: 5px;
-    padding: 0 5px;
+    padding: 1em;
 }
 
 .task-info
 {
     display: flex;
-    gap: 0.3em;
-    width: 100%;
-    height: 70%;   
+    flex-direction: column;
+    gap: 0.7em;
 }
 
 .task-info p
 {
-    height: 90px;
-    width: 100%;
-    border-radius: 5px;
-    display: flex;
-    padding-left: 5px;
-    align-items: center;
-    text-align: left;
-    box-shadow: 0 0 4px rgba(0, 0, 0, 0.1);
-    background-color: inherit;
-    overflow-Y: auto;
-    flex-wrap: wrap;
+    font-size:  16;
+    font-weight: 400;
+    margin: 0;
+}
+
+.item-header
+{
+    font-size: 20px;
+    font-weight: 900;
+    letter-spacing: 1px;
 }
 
 .task-info p::-webkit-scrollbar 
@@ -452,12 +449,11 @@ label
 
 .task-actions
 {
-    width: 100%;
-    height: 30%;
     display: flex;
     justify-content: center;
     align-items: center;
     gap: 0.3em;
+    flex-direction: column;
 }
 
 .task-actions button
@@ -467,35 +463,29 @@ label
     align-items: center;
     border: none;
     background-color: inherit;
+    cursor: pointer;
+    font-size: 2rem;
 }
 
 .task-actions .edit-icon:hover
 {
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    color: grey;
     transition: all .7s ease-in-out;
-    font-size: .3rem;
 }
 
 .edit-icon
 {
     color: #2196f3;
-    font-size: 1.5rem;
 }
 
 .delete-icon
 {
     color: red;
-    font-size: 1.5rem;
 }
 .task-actions .delete-icon:hover
 {
-    border-radius: 50%;
-    width: 20px;
-    height: 20px;
+    color: grey;
     transition: all .7s ease-in-out;
-    font-size: .3rem;
 }
 
 .tasks::-webkit-scrollbar 

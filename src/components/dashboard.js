@@ -294,8 +294,8 @@ function Dashboard({ setIsSignedIn }) {
                   style={{ backgroundColor: getPriorityColor(task.priority) }}
                 >
                   <div className='task-info'>
-                    <p>{task.task}</p>
-                    <p>{task.date}</p>
+                    <p className='item-header'>{task.task}</p>
+                    <p>{new Date(task.date).toLocaleDateString()}</p>
                     <p>{task.priority}</p>
                   </div>
                   <div className='task-actions'>
