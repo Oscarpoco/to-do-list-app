@@ -1,5 +1,3 @@
-![sketch](https://github.com/user-attachments/assets/4476204a-1cbf-4d22-86ab-8e5f65dbda44)
-
 
 # Todo List Application
 
@@ -81,7 +79,7 @@ yarn start
 
 ## Backend API
 
-The backend server operates on port 5000 and provides the following endpoints:
+The backend server operates on port 5000 and need to be ran:
 
 ```bash
 cd src/SQLjs
