@@ -1,73 +1,128 @@
 ![sketch](https://github.com/user-attachments/assets/4476204a-1cbf-4d22-86ab-8e5f65dbda44)
 
 
-# Getting Started with Create React App
+# Todo List Application
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack Todo List application built with React for the frontend and Node.js with SQLite for the backend. The application features user authentication and comprehensive todo management capabilities.
 
-## Available Scripts
+## Repository
 
-In the project directory, you can run:
+[GitHub Repository](https://github.com/Oscarpoco/to-do-list-app/tree/master)
 
-### `npm start`
+## Features
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- **User Authentication**
+  - Account registration
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- **Todo Management**
+  - Create, read, update, and delete todos
+  - Add detailed descriptions
+  - Set due dates for tasks
+  - Assign priority levels (low, medium, high)
+  - Mark todos as completed
 
-### `npm test`
+## Tech Stack
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Frontend
+- React.js
+- React Hooks for state management
+- Fetch API for HTTP requests
 
-### `npm run build`
+### Backend
+- Node.js
+- Express.js
+- SQLite (in-memory database)
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Project Structure
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+```
+to-do-list-app/
+├── src/
+│   ├── SQLjs/
+│   │   └── sql.js              # SQLite database integration file
+│   ├── components/             # React components
+│   ├── App.js                  # Main application component
+│   ├── index.js                # Entry point
+│   ├── package.json            # Project dependencies
+│   └── ...
+├── README.md                   # Project documentation
+└── ...
+```
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Getting Started
 
-### `npm run eject`
+### Prerequisites
+- Node.js (v14 or higher)
+- npm (v6 or higher) or yarn
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+### Installation
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+1. Clone the repository:
+```bash
+git clone https://github.com/Oscarpoco/to-do-list-app.git
+cd to-do-list-app
+```
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+2. Install dependencies:
+```bash
+npm install
+# or
+yarn install
+```
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+3. Start the development server:
+```bash
+npm start
+# or
+yarn start
+```
 
-## Learn More
+4. The application will be available at `http://localhost:3000`
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Backend API
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+The backend server operates on port 5000 and provides the following endpoints:
 
-### Code Splitting
+```bash
+cd src/SQLjs
+node sql.js
+```
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Usage
 
-### Analyzing the Bundle Size
+1. Register a new account or login with existing credentials
+2. Add new todos using the "Add Todo" form
+3. View your todos in the main list
+4. Mark todos as completed by clicking the checkbox
+5. Edit or delete todos using the respective buttons
+6. Filter todos by status, priority, or due date (if implemented)
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## Development
 
-### Making a Progressive Web App
+### Running the Backend Separately
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+```bash
+node sql.js
+```
 
-### Advanced Configuration
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
 
-### Deployment
+## Contributing
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-### `npm run build` fails to minify
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+## Author
+
+Oscar Poco - [GitHub Profile](https://github.com/Oscarpoco)
+
+## Acknowledgments
+
+- React documentation
+- SQLite documentation
+- Express.js documentation
